@@ -1,14 +1,79 @@
-game-container{
+body{
+  display: flex;
+  justify-content: center;
+}
+
+/* Game dropdown */
+
+.drop{
+  background-color: grey;
+  color: black;
+  padding: 10px;
+  font-size: 10px;
+  border: none;
+  position: relative;
+  display: inline-block;
+}
+
+.drop:focus {
+  background-color: blue;
+  color: white;
+}
+
+.game-content{
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.game-content div:hover {
+  background-color: #ddd;
+}
+
+.show{
+  display: block;
+}
+
+
+
+.game-container{
   display: flex;
   direction: column;
   height: 500px;
-
+  justify-content: center;
+  border: 1px solid black;
+  min-width: 310px;
+  min-height: 400px;
 }
 
-score-container{
+.score-container{
   display: flex;
-  direction: row;
   align-items: center;
   justify-content: space-between;
+  border: 1px solid black;
+  height: 60px;
+  min-width: 300px;
+  margin: 5px;
 }
 
+.flag-count, .time-score{
+  display: flex;
+  height: 40px;
+  width: 60px;
+  border: 1px solid black;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+}
+
+.emoji, .smile{
+  height: 40px;
+}
+
+.grid-container{
+  display: flex;
+  flex-wrap: wrap;
+}

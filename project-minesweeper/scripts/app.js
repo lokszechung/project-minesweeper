@@ -9,7 +9,56 @@ function init() {
   const timeScore = document.querySelector('.time-score')
   // number of bombs which is also number of flags available - depletes as flags or added back when unplaced
   const flagCount = document.querySelector('.flag-count')
-  // difficulty 
+  // Game button
+  const gameButton = document.querySelector('.game')
+  const gameContent = document.querySelector('.game-content')
+  function gameDropdown(){
+    gameContent.classList.toggle('show')
+  }
+
+  gameButton.addEventListener('click', gameDropdown)
+
+  // ! below will close dropdown when only outside window is clicked
+  // function clickOut(e){
+  //   if (!e.target.classList.contains('game')){
+  //     gameContent.classList.remove('show')
+  //   }
+  // }
+  // window.addEventListener('click', clickOut)
+  
+  // ! below will close dropdown when anything is clicked
+  function clickOut(e){
+    if (e.target !== gameButton){
+      gameContent.classList.remove('show')
+    }
+  }
+  window.addEventListener('click', clickOut)
+
+
+  // difficulty
+
+  // const beginnerChoice = document.querySelector('.beginner')
+  // const intermediateChoice = document.querySelector('.intermediate')
+  // const expertChoice = document.querySelector('.expert')
+  const difficultyChoice = document.querySelectorAll('.difficulty')
+
+  let difficultySetting
+  let choice 
+
+  function difficultyOfGame(e){
+    choice = e.target.id
+    console.log(choice)
+    difficultySetting = difficulty[choice]
+    console.log(difficultySetting)
+  }
+
+  difficultyChoice.forEach(choice => choice.addEventListener('click', difficultyOfGame))
+
+
+
+
+
+
   // squares in the grid // ! generated using JS
   // buttons for help/options - to choose difficulty or reset
   // button to start game - probably in the form of choosing difficulty
@@ -52,7 +101,7 @@ function init() {
     // ! Stretch: allow player to generate custom board size and bomb count  
   }
 
-  function timeScore(){
+  function timingScore(){
     // clearInterval(timer)
     // setInterval, count++ every 1000ms, as soon a first square is clicked
   }
@@ -66,7 +115,7 @@ function init() {
     // win if only bombs squares unclicked
   }
 
-  function flagCount(){
+  function flagCounting(){
     // flag count to track flag class on grid
   }
 
