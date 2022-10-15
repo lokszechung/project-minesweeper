@@ -1,0 +1,14 @@
+game-container{
+  display: flex;
+  direction: column;
+  height: 500px;
+
+}
+
+score-container{
+  display: flex;
+  direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
