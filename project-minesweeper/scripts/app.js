@@ -1,15 +1,15 @@
 function init() {
-  // do we have to think about mobile users?
-  // githubs
+  // TODO do we have to think about mobile users?
+  // TODO githubs
 
   // ** Elements **
-  // parent to appendChild to 
+  // TODO parent to appendChild to 
   const gridContainer = document.querySelector('.grid-container')
-  // timer which is also the score
+  // TODO timer which is also the score
   const timeScore = document.querySelector('.time-score')
-  // number of bombs which is also number of flags available - depletes as flags or added back when unplaced
+  // TODO number of bombs which is also number of flags available - depletes as flags or added back when unplaced
   const flagCount = document.querySelector('.flag-count')
-  // Game button
+  // TODO buttons for help/options - to choose difficulty or reset
   const gameButton = document.querySelector('.game')
   const gameContent = document.querySelector('.game-content')
   function gameDropdown(){
@@ -33,40 +33,8 @@ function init() {
     }
   }
   window.addEventListener('click', clickOut)
-
-
-  // difficulty
-
-  // const beginnerChoice = document.querySelector('.beginner')
-  // const intermediateChoice = document.querySelector('.intermediate')
-  // const expertChoice = document.querySelector('.expert')
-  const difficultyChoice = document.querySelectorAll('.difficulty')
-
-  let difficultySetting
-  let choice 
-
-  function difficultyOfGame(e){
-    choice = e.target.id
-    console.log(choice)
-    difficultySetting = difficulty[choice]
-    console.log(difficultySetting)
-  }
-
-  difficultyChoice.forEach(choice => choice.addEventListener('click', difficultyOfGame))
-
-
-
-
-
-
-  // squares in the grid // ! generated using JS
-  // buttons for help/options - to choose difficulty or reset
-  // button to start game - probably in the form of choosing difficulty
-  // flag 
-  // bomb
-  // high scores
-
-  // object for difficult, within that has objects for E/M/D with keys for cellCount and bombs
+  
+  // TODO object for difficult, within that has objects for E/M/D with keys for cellCount and bombs
   const difficulty = {
     beginner: { 
       width: 8,
@@ -84,6 +52,82 @@ function init() {
       bombs: 99,
     },
   }
+
+  // TODO starting default grid
+
+  const cells = []
+
+  function defaultGrid(){
+    gridContainer.innerHTML = ''
+    for (let i = 0; i < 64; i++){
+      const cell = document.createElement('div')
+      cell.classList.add('square')
+      cell.innerHTML = i
+      gridContainer.appendChild(cell)
+      cells.push(cell)
+    }
+
+    gridContainer.style.width = `${difficulty.beginner.width * 22}px`
+    console.log(gridContainer.style.width)
+    gridContainer.style.height = `${difficulty.beginner.height * 22}px`
+    console.log(gridContainer.style.height)
+  }
+
+  defaultGrid()
+
+  // TODO difficulty
+
+  // const beginnerChoice = document.querySelector('.beginner')
+  // const intermediateChoice = document.querySelector('.intermediate')
+  // const expertChoice = document.querySelector('.expert')
+  const difficultyChoice = document.querySelectorAll('.difficulty')
+
+  let difficultySetting
+  let choice 
+
+  function difficultyOfGame(e){
+    choice = e.target.id
+    console.log(choice)
+    difficultySetting = difficulty[choice]
+    console.log(difficultySetting)
+
+    // TODO squares in the grid // ! generated using JS
+
+    const cellCount = difficulty[choice].width * difficulty[choice].height
+
+    function createGrid(){
+      gridContainer.innerHTML = ''
+      for (let i = 0; i < cellCount; i++){
+        const cell = document.createElement('div')
+        cell.classList.add('square')
+        cell.innerHTML = i
+        gridContainer.appendChild(cell)
+        cells.push(cell)
+      }
+
+      gridContainer.style.width = `${difficulty[choice].width * 22}px`
+      console.log(gridContainer.style.width)
+      gridContainer.style.height = `${difficulty[choice].height * 22}px`
+      console.log(gridContainer.style.height)
+    }
+
+    createGrid()
+
+
+  }
+
+  difficultyChoice.forEach(choice => choice.addEventListener('click', difficultyOfGame))
+
+
+
+
+  
+
+  // TODO button to start game - probably in the form of choosing difficulty
+  // TODO flag 
+  // TODO bomb
+  // TODO high scores
+
 
 
   // ** Variables **
