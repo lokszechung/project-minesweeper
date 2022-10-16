@@ -51,6 +51,12 @@ function init() {
       height: 16,
       bombs: 99,
     },
+
+    custom: {
+      width: '',
+      height: '',
+      bombs: '',
+    },
   }
 
   // TODO starting default grid
@@ -71,8 +77,30 @@ function init() {
     console.log(gridContainer.style.width)
     gridContainer.style.height = `${difficulty.beginner.height * 22}px`
     console.log(gridContainer.style.height)
-  }
 
+    console.log(difficulty.beginner.bombs)
+
+    function randomBombs(){
+      const bombsNeeded = difficulty.beginner.bombs
+      let bombsPlaced = 0
+      const bombPlacement = []
+      
+      while (bombsPlaced < difficulty.beginner.bombs){
+
+        const random = Math.floor(Math.random() * cells.length)
+        const randomIndex = cells[random]
+        if (!bombPlacement.some(pos => pos === randomIndex)){
+          bombPlacement.push(randomIndex)
+          bombsPlaced++
+        }    
+      }
+      bombPlacement.forEach(square => square.classList.add('mine'))
+      console.log(bombPlacement)    
+      
+      
+    }
+    randomBombs()
+  }
   defaultGrid()
 
   // TODO difficulty
