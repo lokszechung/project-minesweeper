@@ -61,7 +61,9 @@ function init() {
 
   // TODO starting default grid
 
-  const cells = []
+  let cells = []
+  let bombsPlaced = 0
+  let bombPlacement = []
 
   function defaultGrid(){
     gridContainer.innerHTML = ''
@@ -80,11 +82,10 @@ function init() {
 
     console.log(difficulty.beginner.bombs)
 
-    function randomBombs(){
-      const bombsNeeded = difficulty.beginner.bombs
-      let bombsPlaced = 0
-      const bombPlacement = []
-      
+
+    function defaultRandomBombs(){   
+      bombsPlaced = 0
+      bombPlacement = []   
       while (bombsPlaced < difficulty.beginner.bombs){
 
         const random = Math.floor(Math.random() * cells.length)
@@ -94,12 +95,10 @@ function init() {
           bombsPlaced++
         }    
       }
-      bombPlacement.forEach(square => square.classList.add('mine'))
-      console.log(bombPlacement)    
-      
+      bombPlacement.forEach(square => square.classList.add('mine'))      
       
     }
-    randomBombs()
+    defaultRandomBombs()
   }
   defaultGrid()
 
@@ -125,6 +124,7 @@ function init() {
 
     function createGrid(){
       gridContainer.innerHTML = ''
+      cells = []
       for (let i = 0; i < cellCount; i++){
         const cell = document.createElement('div')
         cell.classList.add('square')
@@ -134,9 +134,33 @@ function init() {
       }
 
       gridContainer.style.width = `${difficulty[choice].width * 22}px`
-      console.log(gridContainer.style.width)
       gridContainer.style.height = `${difficulty[choice].height * 22}px`
-      console.log(gridContainer.style.height)
+
+      function randomBombs(){  
+        console.log(cells)
+        cells.forEach(square => square.classList.remove('mine')) 
+        bombsPlaced = 0
+        bombPlacement = []  
+        console.log('after clear-->' + bombPlacement) 
+        console.log(difficulty[choice].bombs)
+        while (bombsPlaced < difficulty[choice].bombs){
+          const random = Math.floor(Math.random() * cells.length)
+          console.log('cell -->' + random)
+          const randomIndex = cells[random]
+          console.log('RI -->' + randomIndex)
+          if (!bombPlacement.some(pos => pos === randomIndex)){
+            bombPlacement.push(randomIndex)
+            bombsPlaced++
+          }    
+        }
+        console.log('bombs at -->' + bombPlacement) 
+        bombPlacement.forEach(square => square.classList.add('mine'))  
+        console.log('bb length -- >' + bombPlacement.length)
+        
+      }
+      randomBombs()
+
+
     }
 
     createGrid()
