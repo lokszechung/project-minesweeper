@@ -7,7 +7,7 @@ function init() {
   const gridContainer = document.querySelector('.grid-container')
   // TODO timer which is also the score
   const timeScore = document.querySelector('.time-score')
-  // TODO number of bombs which is also number of flags available - depletes as flags or added back when unplaced
+  // TODO number of mines which is also number of flags available - depletes as flags or added back when unplaced
   const flagCount = document.querySelector('.flag-count')
   // TODO buttons for help/options - to choose difficulty or reset
   const gameButton = document.querySelector('.game')
@@ -35,70 +35,79 @@ function init() {
   window.addEventListener('click', clickOut)
   
   // TODO object for difficult, within that has objects for E/M/D with keys for cellCount and bombs
+  let difficultySetting
+  let choice 
+  
   const difficulty = {
     beginner: { 
       width: 8,
       height: 8,
-      bombs: 10, 
+      mines: 10, 
     },
     intermediate: {
-      width: 16,
-      height: 16,
-      bombs: 40,
+      width: 9,
+      height: 9,
+      mines: 2,
     },
     expert: {
       width: 30,
       height: 16,
-      bombs: 99,
+      mines: 99,
     },
 
     custom: {
       width: '',
       height: '',
-      bombs: '',
+      mines: '',
     },
   }
 
   // TODO starting default grid
 
+  let cell
   let cells = []
-  let bombsPlaced = 0
-  let bombPlacement = []
+  let minesPlaced = 0
+  let minePlacement = []
 
   function defaultGrid(){
+    choice = 'beginner'
+    difficultySetting = difficulty[choice]
+    const cellCount = difficulty[choice].width * difficulty[choice].height
     gridContainer.innerHTML = ''
-    for (let i = 0; i < 64; i++){
-      const cell = document.createElement('div')
-      cell.classList.add('square')
-      cell.innerHTML = i
+    
+    for (let i = 0; i < cellCount; i++){
+      cell = document.createElement('div')
+      cell.classList.add('cell')
+      cell.dataset.index = i
+      // cell.innerHTML = i
       gridContainer.appendChild(cell)
       cells.push(cell)
     }
 
-    gridContainer.style.width = `${difficulty.beginner.width * 22}px`
-    console.log(gridContainer.style.width)
-    gridContainer.style.height = `${difficulty.beginner.height * 22}px`
-    console.log(gridContainer.style.height)
+    gridContainer.style.width = `${difficulty[choice].width * 22}px`
+    gridContainer.style.height = `${difficulty[choice].height * 22}px`
 
-    console.log(difficulty.beginner.bombs)
-
-
-    function defaultRandomBombs(){   
-      bombsPlaced = 0
-      bombPlacement = []   
-      while (bombsPlaced < difficulty.beginner.bombs){
+    function defaultRandomMines(){   
+      minesPlaced = 0
+      minePlacement = []   
+      while (minesPlaced < difficulty.beginner.mines){
 
         const random = Math.floor(Math.random() * cells.length)
         const randomIndex = cells[random]
-        if (!bombPlacement.some(pos => pos === randomIndex)){
-          bombPlacement.push(randomIndex)
-          bombsPlaced++
+        if (!minePlacement.some(pos => pos === randomIndex)){
+          minePlacement.push(randomIndex)
+          minesPlaced++
         }    
       }
-      bombPlacement.forEach(square => square.classList.add('mine'))      
+      minePlacement.forEach(cell => cell.classList.add('mine'))      
       
     }
-    defaultRandomBombs()
+    defaultRandomMines()
+
+    // cells.forEach(cell => cell.addEventListener('click', mineClicked))
+    
+    cells.forEach(cell => cell.addEventListener('click', reveal))
+
   }
   defaultGrid()
 
@@ -109,14 +118,142 @@ function init() {
   // const expertChoice = document.querySelector('.expert')
   const difficultyChoice = document.querySelectorAll('.difficulty')
 
-  let difficultySetting
-  let choice 
+  // TODO Global functions 
+
+  // function mineClicked(e){
+  //   if (e.target.classList.contains('mine')){
+  //     const allMines = document.querySelectorAll('.mine')
+  //     allMines.forEach(cell => cell.classList.add('mine-clicked'))
+  //   }
+  // }
+
+  difficultySetting = difficulty[choice]
+  const cellCount = difficulty[choice].width * difficulty[choice].height
+
+  // TODO reveal cell 
+
+  // function opened(e){
+  //   if (!e.target.classList.contains('mine')){
+  //     e.target.classList.add('opened')
+  //   }
+  // }  
+  // cells.forEach(cell => cell.addEventListener('click', opened))    
+
+   
+
+  function reveal(e){
+  
+    const target = e.target || e 
+    const { dataset, classList } = target
+    const currentCell = dataset.index   
+    console.log(currentCell)
+    const adjacent = []
+    let minesAdjacent = []
+    // TODO Numbered cell 
+
+    if (classList.contains('flag')){
+      return
+    }  
+  
+    // function nextToMine(){
+    if (!classList.contains('mine')){
+      classList.add('opened')
+      // check right
+      if (currentCell % difficulty[choice].width !== difficulty[choice].width - 1){
+        adjacent.push(cells[parseFloat(currentCell) + 1])
+      }
+      // check left
+      if (currentCell % difficulty[choice].width !== 0){
+        adjacent.push(cells[parseFloat(currentCell) - 1])
+      }
+      // check up
+      if (currentCell >= difficulty[choice].width){
+        adjacent.push(cells[parseFloat(currentCell) - difficulty[choice].width])
+      }
+      // check down 
+      if (currentCell < cellCount - difficulty[choice].width){
+        adjacent.push(cells[parseFloat(currentCell) + difficulty[choice].width])
+      }
+      // check up left
+      if (currentCell >= difficulty[choice].width && currentCell % difficulty[choice].width !== 0){
+        adjacent.push(cells[parseFloat(currentCell) - 1 - difficulty[choice].width])
+      }
+      // check up right
+      if (currentCell >= difficulty[choice].width && currentCell % difficulty[choice].width !== difficulty[choice].width - 1){
+        adjacent.push(cells[parseFloat(currentCell) + 1 - difficulty[choice].width])
+      }
+      // check down left
+      if (currentCell < cellCount - difficulty[choice].width && currentCell % difficulty[choice].width !== 0){
+        adjacent.push(cells[parseFloat(currentCell) - 1 + difficulty[choice].width]) 
+      }
+      // check down right
+      if (currentCell < cellCount - difficulty[choice].width && currentCell % difficulty[choice].width !== difficulty[choice].width - 1){
+        adjacent.push(cells[parseFloat(currentCell) + 1 + difficulty[choice].width])
+      }
+      console.log(adjacent)
+      
+      minesAdjacent = adjacent.filter(cell => cell.classList.contains('mine'))
+      console.log(minesAdjacent)
+    }  
+    // }
+    // nextToMine()  
+  
+    if (minesAdjacent.length === 0){
+      console.log(adjacent)
+      adjacent.forEach(cell => {
+        if (!cell.classList.contains('opened')){
+          reveal(cell) 
+        }
+      }) 
+    } else {
+      console.log(minesAdjacent)
+      console.log(minesAdjacent.length)
+      target.innerHTML = minesAdjacent.length
+      console.log({ target })
+    }
+
+    if (classList.contains('mine')){
+      const allMines = document.querySelectorAll('.mine')
+      allMines.forEach(cell => cell.classList.add('mine-clicked'))
+      console.log('Game over')
+      cells.forEach(cell => {
+        cell.style.pointerEvents = 'none'
+      })
+    }
+
+    winCondition()
+    
+    // function gameOver(){
+    //   cells.forEach(cell => cell.addEventListener('click', mineClicked))
+    //   console.log('Game over')
+    // }
+    // gameOver()
+  
+  }
+
+  // TODO win condition
+
+  function winCondition(){
+    const noMines = cellCount - difficulty[choice].mines
+    console.log(cellCount)
+    console.log(noMines)
+    const openedCells = cells.filter(cell => cell.classList.contains('opened'))
+    console.log(openedCells.length)
+    if (noMines === openedCells.length){
+      console.log('Winner')
+      const allMines = document.querySelectorAll('.mine')
+      allMines.forEach(cell => cell.classList.add('flag'))
+      cells.forEach(cell => {
+        cell.style.pointerEvents = 'none'
+      })
+    }
+  }
+
+
 
   function difficultyOfGame(e){
     choice = e.target.id
-    console.log(choice)
     difficultySetting = difficulty[choice]
-    console.log(difficultySetting)
 
     // TODO squares in the grid // ! generated using JS
 
@@ -127,57 +264,62 @@ function init() {
       cells = []
       for (let i = 0; i < cellCount; i++){
         const cell = document.createElement('div')
-        cell.classList.add('square')
-        cell.innerHTML = i
+        cell.classList.add('cell')
+        cell.dataset.index = i
         gridContainer.appendChild(cell)
         cells.push(cell)
       }
-
       gridContainer.style.width = `${difficulty[choice].width * 22}px`
       gridContainer.style.height = `${difficulty[choice].height * 22}px`
 
-      function randomBombs(){  
-        console.log(cells)
-        cells.forEach(square => square.classList.remove('mine')) 
-        bombsPlaced = 0
-        bombPlacement = []  
-        console.log('after clear-->' + bombPlacement) 
-        console.log(difficulty[choice].bombs)
-        while (bombsPlaced < difficulty[choice].bombs){
+      function randomMines(){  
+        cells.forEach(cell => cell.classList.remove('mine')) 
+        minesPlaced = 0
+        minePlacement = []  
+        while (minesPlaced < difficulty[choice].mines){
           const random = Math.floor(Math.random() * cells.length)
-          console.log('cell -->' + random)
           const randomIndex = cells[random]
-          console.log('RI -->' + randomIndex)
-          if (!bombPlacement.some(pos => pos === randomIndex)){
-            bombPlacement.push(randomIndex)
-            bombsPlaced++
+          if (!minePlacement.some(pos => pos === randomIndex)){
+            minePlacement.push(randomIndex)
+            minesPlaced++
           }    
         }
-        console.log('bombs at -->' + bombPlacement) 
-        bombPlacement.forEach(square => square.classList.add('mine'))  
-        console.log('bb length -- >' + bombPlacement.length)
-        
+        minePlacement.forEach(cell => cell.classList.add('mine'))  
       }
-      randomBombs()
-
-
+      randomMines()
     }
 
     createGrid()
 
+    cells.forEach(cell => cell.addEventListener('click', reveal))
 
+    cells.forEach(cell => cell.addEventListener('contextmenu', rightClick))
   }
 
   difficultyChoice.forEach(choice => choice.addEventListener('click', difficultyOfGame))
 
+  // TODO tight click toggle flag
 
-
-
+  function nothing(e){
+    if (e.target.classList.contains('flag')){
+      return
+    }  
+  }
   
 
+
+  function rightClick(e){
+    e.preventDefault()
+    e.target.classList.toggle('flag')
+  }
+
+  cells.forEach(cell => cell.addEventListener('contextmenu', rightClick))
+
+ 
+
+
   // TODO button to start game - probably in the form of choosing difficulty
-  // TODO flag 
-  // TODO bomb
+
   // TODO high scores
 
 
@@ -192,9 +334,9 @@ function init() {
   function difficultyPicked(){
     // restarts the game after being picked
     // if statement to check difficulty
-    // depending on difficulty, different board sizes and number of bombs will be generated
+    // depending on difficulty, different board sizes and number of mines will be generated
     // Could have separate functions for easy, medium, hard board generation
-    // ! Stretch: allow player to generate custom board size and bomb count  
+    // ! Stretch: allow player to generate custom board size and mine count  
   }
 
   function timingScore(){
@@ -214,13 +356,20 @@ function init() {
   function flagCounting(){
     // flag count to track flag class on grid
   }
+  // function gameOver(){
+  //   cells.forEach(cell => cell.addEventListener('click', mineClicked))
+  //   console.log('Game over')
+  // }
 
-  function gameOver(){
-    // clearInterval
-    // game over overlay
-    // restart option
-    // ! Stretch: some animations 
-  }
+
+
+
+  // function gameOver(){
+  // clearInterval
+  // game over overlay
+  // restart option
+  // ! Stretch: some animations 
+  // }
 
   function win(){
     // win overlay

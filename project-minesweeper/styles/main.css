@@ -5,6 +5,10 @@ body{
 
 /* Game dropdown */
 
+.game{
+  cursor: default;
+}
+
 .drop{
   background-color: grey;
   color: black;
@@ -15,12 +19,13 @@ body{
   display: inline-block;
 }
 
-.drop:focus {
+.drop:hover {
   background-color: blue;
   color: white;
 }
 
 .game-content{
+  cursor: auto;
   display: none;
   position: absolute;
   background-color: #f1f1f1;
@@ -30,7 +35,8 @@ body{
 }
 
 .game-content div:hover {
-  background-color: #ddd;
+  background-color: blue;
+  color: white;
 }
 
 .show{
@@ -82,13 +88,23 @@ body{
   height: 256px; */
 }
 
-.square{
+.cell{
   width: 20px;
   height: 20px;
   border: 1px solid black;
   font-size: 10px;
 }
 
-.mine{
+.mine-clicked, .flag.mine-clicked{
   background-color: black;
+}
+
+.flag{
+  background-color: red;
+  /* pointer-events: none; */
+}
+
+.opened{
+  background-color: blueviolet;
+  color: white;
 }
