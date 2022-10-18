@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body{
   display: flex;
   justify-content: center;
@@ -84,13 +88,15 @@ body{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   /* width: 256px;
   height: 256px; */
 }
 
 .cell{
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border: 1px solid black;
   font-size: 10px;
 }
@@ -107,4 +113,85 @@ body{
 .opened{
   background-color: blueviolet;
   color: white;
+}
+
+#sec-unit, #sec-ten, #sec-hundred{
+  width: 16.5px;
+  height: 31.5px;
+}
+
+.gap{
+  width: 3px;
+  height: 31.5px;
+  background-color: black;
+}
+
+.zerosec{
+  background-image: url("../assets/t0.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.onesec{
+  background-image: url("../assets/t1.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.twosec{
+  background-image: url("../assets/t2.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.threesec{
+  background-image: url("../assets/t3.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.foursec{
+  background-image: url("../assets/t4.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.fivesec{
+  background-image: url("../assets/t5.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.sixsec{
+  background-image: url("../assets/t6.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.sevensec{
+  background-image: url("../assets/t7.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.eightsec{
+  background-image: url("../assets/t8.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.ninesec{
+  background-image: url("../assets/t9.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }

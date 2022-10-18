@@ -42,17 +42,17 @@ function init() {
     beginner: { 
       width: 8,
       height: 8,
-      mines: 1, 
+      mines: 10, 
     },
     intermediate: {
       width: 16,
       height: 16,
-      mines: 4,
+      mines: 40,
     },
     expert: {
       width: 30,
       height: 16,
-      mines: 4,
+      mines: 99,
     },
 
     custom: {
@@ -179,6 +179,7 @@ function init() {
     
     resetButton.addEventListener('click', reset)
 
+
     // TODO create grid using JS
     function createGrid(){
       gridContainer.innerHTML = ''
@@ -186,13 +187,12 @@ function init() {
       for (let i = 0; i < cellCount; i++){
         const cell = document.createElement('div')
         cell.classList.add('cell')
-        cell.innerHTML = i
         cell.dataset.index = i
         gridContainer.appendChild(cell)
         cells.push(cell)
       }
-      gridContainer.style.width = `${difficulty[choice].width * 22}px`
-      gridContainer.style.height = `${difficulty[choice].height * 22}px`
+      gridContainer.style.width = `${difficulty[choice].width * 24}px`
+      gridContainer.style.height = `${difficulty[choice].height * 24}px`
 
       function randomMines(){  
         cells.forEach(cell => cell.classList.remove('mine')) 
@@ -209,6 +209,8 @@ function init() {
         minePlacement.forEach(cell => cell.classList.add('mine'))  
       }
       randomMines()
+
+      gridContainer.addEventListener('click' || 'contextmenu', timingScore, { once: true })
     }
 
     // TODO pick difficulty
@@ -236,9 +238,11 @@ function init() {
       createGrid()
       cells.forEach(cell => cell.addEventListener('click', reveal))
       cells.forEach(cell => cell.addEventListener('contextmenu', rightClick))
+      
+      resetTimer()
     }
     
-      
+    // TODO open squares recursive function and main gameplay
     function reveal(e){
       
       difficultySetting = difficulty[choice]
@@ -347,7 +351,91 @@ function init() {
     
   }
   start()
- 
+
+  let secondsUnit
+  let secondsTen
+  let secondsHundred
+  let timer
+  let unit 
+  let ten 
+  let hundred 
+  let count 
+  const secUnit = document.querySelector('#sec-unit')
+  const secTen = document.querySelector('#sec-ten')
+  const secHundred = document.querySelector('#sec-hundred')
+
+  const timeArray = [ 'zerosec', 'onesec', 'twosec', 'threesec', 'foursec', 'fivesec', 'sixsec', 'sevensec', 'eightsec', 'ninesec' ]
+  
+  function timingScore(){
+    
+    unit = 1
+    ten = 1
+    hundred = 1
+    count = 0
+
+    timer = setInterval(() => {
+      count++
+      console.log(count)
+    }, 1000)
+
+    secondsUnit = setInterval(() => {
+      if (unit === 0){
+        secUnit.classList.remove(timeArray[9])
+      } else {
+        secUnit.classList.remove(timeArray[unit - 1])
+      }
+      secUnit.classList.add(timeArray[unit])
+      unit++
+      if (unit >= timeArray.length){
+        unit = 0
+      }
+    }, 1000)
+  
+
+    secondsTen = setInterval(() => {
+      if (ten === 0){
+        secTen.classList.remove(timeArray[9])
+      } else {
+        secTen.classList.remove(timeArray[ten - 1])
+      }
+      secTen.classList.add(timeArray[ten])
+      ten++
+      if (ten >= timeArray.length){
+        ten = 0
+      }
+    }, 10000)  
+
+
+    secondsHundred = setInterval(() => {
+      if (hundred === 0){
+        secHundred.classList.remove(timeArray[9])
+      } else {
+        secHundred.classList.remove(timeArray[hundred - 1])
+      }
+      secHundred.classList.add(timeArray[hundred])
+      hundred++
+      if (hundred >= timeArray.length){
+        hundred = 0
+      }
+    }, 100000)  
+  }  
+
+  // TODO reset timer
+
+  function resetTimer(){
+    clearInterval(timer)
+    clearInterval(secondsUnit)
+    clearInterval(secondsTen)
+    clearInterval(secondsHundred)
+    secUnit.removeAttribute('class')
+    secUnit.classList.add('zerosec')
+    secTen.removeAttribute('class')
+    secTen.classList.add('zerosec')
+    secHundred.removeAttribute('class')
+    secHundred.classList.add('zerosec')
+  }
+
+
 }
 
 
@@ -361,12 +449,6 @@ function init() {
 // let time
 
 // ** Execution ** 
-
-
-function timingScore(){
-  // clearInterval(timer)
-  // setInterval, count++ every 1000ms, as soon a first square is clicked
-}
 
 
 function flagCounting(){
@@ -401,9 +483,6 @@ function win(){
 
 // ** Events **
 
-// button.addEventListener('click', clickGrid)
-// button.addEventListener('click', resetClick)
-// right click event 
 
 window.addEventListener('DOMContentLoaded', init)
 
@@ -441,4 +520,4 @@ window.addEventListener('DOMContentLoaded', init)
 // function nothing(e){
 //   if (e.target.classList.contains('flag')){
 //     return
-// } 
+// }
