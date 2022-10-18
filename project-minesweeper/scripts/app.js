@@ -36,18 +36,17 @@ function init() {
   }
   window.addEventListener('click', clickOut)
   
-  // TODO object for difficult, within that has objects for E/M/D with keys for cellCount and bombs
-  
+  // TODO object for difficult
   const difficulty = {
     beginner: { 
       width: 8,
       height: 8,
-      mines: 10, 
+      mines: 64, 
     },
     intermediate: {
       width: 16,
       height: 16,
-      mines: 40,
+      mines: 1,
     },
     expert: {
       width: 30,
@@ -62,106 +61,21 @@ function init() {
     },
   }
   
-  // let choice = 'beginner'
-  // let difficultySetting = difficulty[choice]
   
-
-  // TODO starting default grid
 
   let cell
   let cells = []
   let minesPlaced = 0
   let minePlacement = []
 
-  // function start(){
-  //   function defaultGrid(){
-  //     choice = 'beginner'
-  //     difficultySetting = difficulty[choice]
-  //     const cellCount = difficulty[choice].width * difficulty[choice].height
-  //     gridContainer.innerHTML = ''
-      
-  //     for (let i = 0; i < cellCount; i++){
-  //       cell = document.createElement('div')
-  //       cell.classList.add('cell')
-  //       cell.dataset.index = i
-  //       // cell.innerHTML = i
-  //       gridContainer.appendChild(cell)
-  //       cells.push(cell)
-  //     }
-
-  //     gridContainer.style.width = `${difficulty[choice].width * 22}px`
-  //     gridContainer.style.height = `${difficulty[choice].height * 22}px`
-
-  //     function defaultRandomMines(){   
-  //       minesPlaced = 0
-  //       minePlacement = []   
-  //       while (minesPlaced < difficulty.beginner.mines){
-
-  //         const random = Math.floor(Math.random() * cells.length)
-  //         const randomIndex = cells[random]
-  //         if (!minePlacement.some(pos => pos === randomIndex)){
-  //           minePlacement.push(randomIndex)
-  //           minesPlaced++
-  //         }    
-  //       }
-  //       minePlacement.forEach(cell => cell.classList.add('mine'))      
-        
-  //     }
-  //     defaultRandomMines()
-      
-  //     cells.forEach(cell => cell.addEventListener('click', reveal))
-
-  //   }
-  //   defaultGrid()
-  // }
-  // start()
-
-  // function reset(e){
-  //   difficulty[choice] = 'beginner'
-  //   const cellCount = difficulty[choice].width * difficulty[choice].height
-  //   defaultGrid()
-  //   cells.forEach(cell => cell.addEventListener('click', reveal))
-  //   cells.forEach(cell => cell.addEventListener('contextmenu', rightClick))
-  // }
-  // resetButton.addEventListener('click', reset)
 
   // TODO difficulty
 
-  // const beginnerChoice = document.querySelector('.beginner')
-  // const intermediateChoice = document.querySelector('.intermediate')
-  // const expertChoice = document.querySelector('.expert')
   const difficultyChoice = document.querySelectorAll('.difficulty')
 
   // TODO Global functions 
 
-  // function mineClicked(e){
-  //   if (e.target.classList.contains('mine')){
-  //     const allMines = document.querySelectorAll('.mine')
-  //     allMines.forEach(cell => cell.classList.add('mine-clicked'))
-  //   }
-  // }
 
-  // difficultySetting = difficulty[choice]
-  // const cellCount = difficulty[choice].width * difficulty[choice].height
-
-  // TODO reveal cell 
-
-  // function opened(e){
-  //   if (!e.target.classList.contains('mine')){
-  //     e.target.classList.add('opened')
-  //   }
-  // }  
-  // cells.forEach(cell => cell.addEventListener('click', opened))    
-
-   
-
-  
-
-  // TODO reset 
-
-  // function reset(e){
-  //   const resetButton = document.querySelector('.reset')
-  // }
 
   function start(){
   
@@ -217,13 +131,12 @@ function init() {
     function difficultyOfGame(e){
       const target = e.target || e
       choice = target.id
-      console.log(choice)
       difficultySetting = difficulty[choice]
-      console.log(difficultySetting)
       cellCount = difficulty[choice].width * difficulty[choice].height
-      console.log(cellCount)
 
       createGrid()
+
+      resetTimer()
 
       cells.forEach(cell => cell.addEventListener('click', reveal))
 
@@ -233,7 +146,6 @@ function init() {
     // TODO reset button
     function reset(e){
       difficultySetting = difficulty[choice]
-      console.log(difficulty[choice])
       const cellCount = difficulty[choice].width * difficulty[choice].height
       createGrid()
       cells.forEach(cell => cell.addEventListener('click', reveal))
@@ -242,7 +154,7 @@ function init() {
       resetTimer()
     }
     
-    // TODO open squares recursive function and main gameplay
+    // TODO open squares recursive function and main game logic 
     function reveal(e){
       
       difficultySetting = difficulty[choice]
@@ -318,6 +230,12 @@ function init() {
         cells.forEach(cell => {
           cell.style.pointerEvents = 'none'
         })
+        setTimeout(() => {
+          clearInterval(timer)
+          clearInterval(secondsUnit)
+          clearInterval(secondsTen)
+          clearInterval(secondsHundred)
+        }, 1)
       }
 
       winCondition()
@@ -329,18 +247,26 @@ function init() {
     function winCondition(){
       difficultySetting = difficulty[choice]
       const cellCount = difficulty[choice].width * difficulty[choice].height
-      let notMines 
-      notMines = cellCount - difficulty[choice].mines
-      const openedCells = cells.filter(cell => cell.classList.contains('opened'))
-      if (notMines === openedCells.length){
-        notMines = 0
-        console.log('Winner')
-        const allMines = document.querySelectorAll('.mine')
-        allMines.forEach(cell => cell.classList.add('flag'))
-        cells.forEach(cell => {
-          cell.style.pointerEvents = 'none'
-        })
-      }
+      if (cellCount !== difficulty[choice].mines){ //otherwise win and game over shows at the same time
+        let notMines 
+        notMines = cellCount - difficulty[choice].mines
+        const openedCells = cells.filter(cell => cell.classList.contains('opened'))
+        if (notMines === openedCells.length){
+          notMines = 0
+          setTimeout(() => {
+            clearInterval(timer)
+            clearInterval(secondsUnit)
+            clearInterval(secondsTen)
+            clearInterval(secondsHundred)
+          }, 1)
+          !count ? console.log('Winner, you took 0.1 seconds.') : console.log(`Winner, you took ${Math.round(count * 10) / 10} seconds.`)
+          const allMines = document.querySelectorAll('.mine')
+          allMines.forEach(cell => cell.classList.add('flag'))
+          cells.forEach(cell => {
+            cell.style.pointerEvents = 'none'
+          })
+        }
+      }  
     }
 
     // TODO tight click toggle flag
@@ -352,20 +278,21 @@ function init() {
   }
   start()
 
+  // TODO declare variables for timerScore 
+  let timer
   let secondsUnit
   let secondsTen
   let secondsHundred
-  let timer
-  let unit 
-  let ten 
-  let hundred 
-  let count 
+  let unit
+  let ten
+  let hundred
+  let count
   const secUnit = document.querySelector('#sec-unit')
   const secTen = document.querySelector('#sec-ten')
   const secHundred = document.querySelector('#sec-hundred')
-
   const timeArray = [ 'zerosec', 'onesec', 'twosec', 'threesec', 'foursec', 'fivesec', 'sixsec', 'sevensec', 'eightsec', 'ninesec' ]
   
+  // TODO timer
   function timingScore(){
     
     unit = 1
@@ -374,9 +301,9 @@ function init() {
     count = 0
 
     timer = setInterval(() => {
-      count++
-      console.log(count)
-    }, 1000)
+      count += 0.1
+      // console.log(count)
+    }, 100)
 
     secondsUnit = setInterval(() => {
       if (unit === 0){
@@ -423,6 +350,7 @@ function init() {
   // TODO reset timer
 
   function resetTimer(){
+    console.log('timer reset')
     clearInterval(timer)
     clearInterval(secondsUnit)
     clearInterval(secondsTen)
@@ -521,3 +449,6 @@ window.addEventListener('DOMContentLoaded', init)
 //   if (e.target.classList.contains('flag')){
 //     return
 // }
+
+
+
