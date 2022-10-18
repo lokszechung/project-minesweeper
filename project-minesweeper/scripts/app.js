@@ -9,6 +9,8 @@ function init() {
   const timeScore = document.querySelector('.time-score')
   // TODO number of mines which is also number of flags available - depletes as flags or added back when unplaced
   const flagCount = document.querySelector('.flag-count')
+  // TODO reset button
+  const resetButton = document.querySelector('.reset')
   // TODO buttons for help/options - to choose difficulty or reset
   const gameButton = document.querySelector('.game')
   const gameContent = document.querySelector('.game-content')
@@ -42,17 +44,17 @@ function init() {
     beginner: { 
       width: 8,
       height: 8,
-      mines: 10, 
+      mines: 1, 
     },
     intermediate: {
-      width: 9,
-      height: 9,
-      mines: 2,
+      width: 16,
+      height: 16,
+      mines: 10,
     },
     expert: {
       width: 30,
       height: 16,
-      mines: 99,
+      mines: 4,
     },
 
     custom: {
@@ -142,13 +144,16 @@ function init() {
    
 
   function reveal(e){
+    
+    difficultySetting = difficulty[choice]
+    const cellCount = difficulty[choice].width * difficulty[choice].height
   
     const target = e.target || e 
     const { dataset, classList } = target
     const currentCell = dataset.index   
-    console.log(currentCell)
     const adjacent = []
     let minesAdjacent = []
+
     // TODO Numbered cell 
 
     if (classList.contains('flag')){
@@ -190,26 +195,20 @@ function init() {
       if (currentCell < cellCount - difficulty[choice].width && currentCell % difficulty[choice].width !== difficulty[choice].width - 1){
         adjacent.push(cells[parseFloat(currentCell) + 1 + difficulty[choice].width])
       }
-      console.log(adjacent)
       
       minesAdjacent = adjacent.filter(cell => cell.classList.contains('mine'))
-      console.log(minesAdjacent)
     }  
     // }
     // nextToMine()  
   
     if (minesAdjacent.length === 0){
-      console.log(adjacent)
       adjacent.forEach(cell => {
         if (!cell.classList.contains('opened')){
           reveal(cell) 
         }
       }) 
     } else {
-      console.log(minesAdjacent)
-      console.log(minesAdjacent.length)
       target.innerHTML = minesAdjacent.length
-      console.log({ target })
     }
 
     if (classList.contains('mine')){
@@ -222,24 +221,20 @@ function init() {
     }
 
     winCondition()
-    
-    // function gameOver(){
-    //   cells.forEach(cell => cell.addEventListener('click', mineClicked))
-    //   console.log('Game over')
-    // }
-    // gameOver()
+
   
   }
 
   // TODO win condition
 
   function winCondition(){
-    const noMines = cellCount - difficulty[choice].mines
-    console.log(cellCount)
-    console.log(noMines)
+    difficultySetting = difficulty[choice]
+    const cellCount = difficulty[choice].width * difficulty[choice].height
+    let notMines 
+    notMines = cellCount - difficulty[choice].mines
     const openedCells = cells.filter(cell => cell.classList.contains('opened'))
-    console.log(openedCells.length)
-    if (noMines === openedCells.length){
+    if (notMines === openedCells.length){
+      notMines = 0
       console.log('Winner')
       const allMines = document.querySelectorAll('.mine')
       allMines.forEach(cell => cell.classList.add('flag'))
@@ -249,11 +244,24 @@ function init() {
     }
   }
 
+  // TODO reset 
 
+  // function reset(e){
+  //   const resetButton = document.querySelector('.reset')
+  // }
 
   function difficultyOfGame(e){
-    choice = e.target.id
+    const target = e.target || e
+    choice = target.id
     difficultySetting = difficulty[choice]
+  
+    function getKey(difficulty, value){
+      return Object.keys(difficulty).find(key => difficulty[key] === value)
+    }
+    console.log(getKey(difficulty, difficulty[choice]))
+
+    resetButton.id = ''
+    resetButton.id = getKey(difficulty, difficulty[choice])
 
     // TODO squares in the grid // ! generated using JS
 
@@ -291,6 +299,15 @@ function init() {
 
     createGrid()
 
+    function reset(e){
+      difficultySetting = difficulty[choice]
+      const cellCount = difficulty[choice].width * difficulty[choice].height
+      createGrid()
+      cells.forEach(cell => cell.addEventListener('click', reveal))
+      cells.forEach(cell => cell.addEventListener('contextmenu', rightClick))
+    }
+    resetButton.addEventListener('click', reset)
+
     cells.forEach(cell => cell.addEventListener('click', reveal))
 
     cells.forEach(cell => cell.addEventListener('contextmenu', rightClick))
@@ -306,6 +323,10 @@ function init() {
     }  
   }
   
+  // function reset(){
+  //   console.log(difficultySetting)
+  // }
+  
 
 
   function rightClick(e){
@@ -314,8 +335,6 @@ function init() {
   }
 
   cells.forEach(cell => cell.addEventListener('contextmenu', rightClick))
-
- 
 
 
   // TODO button to start game - probably in the form of choosing difficulty
@@ -378,9 +397,9 @@ function init() {
     // restart option (or automatically cleared)
     // ! Stretch: some animations 
   }
-  function resetClick(){
-    // reset the game to chosen difficulty
-  }
+  // function resetClick(){
+  // reset the game to chosen difficulty
+  // }
 
 
   // ** Events **
