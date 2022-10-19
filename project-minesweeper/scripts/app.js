@@ -12,6 +12,7 @@ function init() {
   // TODO reset button
   const resetButton = document.querySelector('.reset')
   // TODO buttons for help/options - to choose difficulty or reset
+  const helpButton = document.querySelector('.help')
   const gameButton = document.querySelector('.game')
   const gameContent = document.querySelector('.game-content')
   function gameDropdown(){
@@ -39,14 +40,14 @@ function init() {
   // TODO object for difficult
   const difficulty = {
     beginner: { 
-      width: 8,
-      height: 8,
-      mines: 64, 
+      width: 15,
+      height: 15,
+      mines: 2, 
     },
     intermediate: {
       width: 16,
       height: 16,
-      mines: 1,
+      mines: 40,
     },
     expert: {
       width: 30,
@@ -68,6 +69,13 @@ function init() {
   let minesPlaced = 0
   let minePlacement = []
 
+
+  let flags 
+  let flaggedCells = []
+  const flagUnit = document.querySelector('#flag-unit')
+  const flagTen = document.querySelector('#flag-ten')
+  const flagHundred = document.querySelector('#flag-hundred')
+  const timeArray = [ 'zeronum', 'onenum', 'twonum', 'threenum', 'fournum', 'fivenum', 'sixnum', 'sevennum', 'eightnum', 'ninenum' ]
 
   // TODO difficulty
 
@@ -124,6 +132,8 @@ function init() {
       }
       randomMines()
 
+      countFlags()
+
       gridContainer.addEventListener('click' || 'contextmenu', timingScore, { once: true })
     }
 
@@ -143,7 +153,7 @@ function init() {
       cells.forEach(cell => cell.addEventListener('contextmenu', rightClick))
     }
 
-    // TODO reset button
+    // TODO reset game button
     function reset(e){
       difficultySetting = difficulty[choice]
       const cellCount = difficulty[choice].width * difficulty[choice].height
@@ -273,7 +283,59 @@ function init() {
     function rightClick(e){
       e.preventDefault()
       e.target.classList.toggle('flag')
+      countFlags()
     }
+    
+    // TODO flag counter
+    function countFlags(){
+      flaggedCells = cells.filter(cell => cell.classList.contains('flag'))
+      flags = difficulty[choice].mines - flaggedCells.length
+      if (flags >= 0 && flags < 10){
+        flagTen.removeAttribute('class')
+        flagTen.classList.add('zeronum')
+        flagUnit.removeAttribute('class')
+        flagUnit.classList.add(timeArray[flags])
+      }  
+      if (flags >= 10){
+        const minesString = flags.toString()
+        const numSplitArray = minesString.split('')
+        flagHundred.removeAttribute('class')
+        flagHundred.classList.add('zeronum')
+        flagTen.removeAttribute('class')
+        flagUnit.removeAttribute('class')
+        flagTen.classList.add(timeArray[numSplitArray[0]])
+        flagUnit.classList.add(timeArray[numSplitArray[1]])
+      }
+      if (flags >= 100){
+        const minesString = flags.toString()
+        const numSplitArray = minesString.split('')
+        flagUnit.removeAttribute('class')
+        flagTen.removeAttribute('class')
+        flagTen.removeAttribute('class')
+        flagHundred.classList.add(timeArray[numSplitArray[0]])
+        flagTen.classList.add(timeArray[numSplitArray[1]])
+        flagUnit.classList.add(timeArray[numSplitArray[2]])
+      }
+      if (flags < 0 && flags > -10){
+        flagHundred.removeAttribute('class')
+        flagHundred.classList.add('blank')
+        flagTen.removeAttribute('class')
+        flagTen.classList.add('minus')
+        flagUnit.removeAttribute('class')
+        flagUnit.classList.add(timeArray[Math.abs(flags)])
+      }
+      if (flags <= -10){
+        const minesString = Math.abs(flags).toString()
+        const numSplitArray = minesString.split('')
+        flagHundred.removeAttribute('class')
+        flagHundred.classList.add('minus')
+        flagTen.removeAttribute('class')
+        flagUnit.removeAttribute('class')
+        flagTen.classList.add(timeArray[numSplitArray[0]])
+        flagUnit.classList.add(timeArray[numSplitArray[1]])
+      }
+    }
+    
     
   }
   start()
@@ -290,9 +352,9 @@ function init() {
   const secUnit = document.querySelector('#sec-unit')
   const secTen = document.querySelector('#sec-ten')
   const secHundred = document.querySelector('#sec-hundred')
-  const timeArray = [ 'zerosec', 'onesec', 'twosec', 'threesec', 'foursec', 'fivesec', 'sixsec', 'sevensec', 'eightsec', 'ninesec' ]
+  // const timeArray = [ 'zeronum', 'onenum', 'twonum', 'threenum', 'fournum', 'fivenum', 'sixnum', 'sevennum', 'eightnum', 'ninenum' ]
   
-  // TODO timer
+  // TODO timer and Score
   function timingScore(){
     
     unit = 1
@@ -302,7 +364,12 @@ function init() {
 
     timer = setInterval(() => {
       count += 0.1
-      // console.log(count)
+      console.log(count)
+      if (count > 999){
+        clearInterval(secondsUnit)
+        clearInterval(secondsTen)
+        clearInterval(secondsHundred)
+      }
     }, 100)
 
     secondsUnit = setInterval(() => {
@@ -344,11 +411,11 @@ function init() {
       if (hundred >= timeArray.length){
         hundred = 0
       }
-    }, 100000)  
+    }, 100000)      
+
   }  
 
   // TODO reset timer
-
   function resetTimer(){
     console.log('timer reset')
     clearInterval(timer)
@@ -356,16 +423,17 @@ function init() {
     clearInterval(secondsTen)
     clearInterval(secondsHundred)
     secUnit.removeAttribute('class')
-    secUnit.classList.add('zerosec')
+    secUnit.classList.add('zeronum')
     secTen.removeAttribute('class')
-    secTen.classList.add('zerosec')
+    secTen.classList.add('zeronum')
     secHundred.removeAttribute('class')
-    secHundred.classList.add('zerosec')
+    secHundred.classList.add('zeronum')
   }
 
 
 }
 
+window.addEventListener('DOMContentLoaded', init)
 
 // TODO high scores
 
@@ -373,8 +441,6 @@ function init() {
 
 // ** Variables **
 
-// let count = 0
-// let time
 
 // ** Execution ** 
 
@@ -412,7 +478,7 @@ function win(){
 // ** Events **
 
 
-window.addEventListener('DOMContentLoaded', init)
+// 999 seconds goes to 000
 
 
 
@@ -452,3 +518,5 @@ window.addEventListener('DOMContentLoaded', init)
 
 
 
+//flagged doesnt open 
+//timer only logs counts if i am on the page, but clock continues

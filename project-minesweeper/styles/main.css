@@ -107,7 +107,6 @@ body{
 
 .flag{
   background-color: red;
-  /* pointer-events: none; */
 }
 
 .opened{
@@ -115,7 +114,7 @@ body{
   color: white;
 }
 
-#sec-unit, #sec-ten, #sec-hundred{
+#sec-unit, #sec-ten, #sec-hundred, #flag-unit,  #flag-ten, #flag-hundred {
   width: 16.5px;
   height: 31.5px;
 }
@@ -126,71 +125,85 @@ body{
   background-color: black;
 }
 
-.zerosec{
+.zeronum{
   background-image: url("../assets/t0.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-.onesec{
+.onenum{
   background-image: url("../assets/t1.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-.twosec{
+.twonum{
   background-image: url("../assets/t2.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-.threesec{
+.threenum{
   background-image: url("../assets/t3.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-.foursec{
+.fournum{
   background-image: url("../assets/t4.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-.fivesec{
+.fivenum{
   background-image: url("../assets/t5.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-.sixsec{
+.sixnum{
   background-image: url("../assets/t6.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-.sevensec{
+.sevennum{
   background-image: url("../assets/t7.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-.eightsec{
+.eightnum{
   background-image: url("../assets/t8.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-.ninesec{
+.ninenum{
   background-image: url("../assets/t9.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.minus{
+  background-image: url("../assets/t-.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.blank{
+  background-image: url("../assets/blank.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
