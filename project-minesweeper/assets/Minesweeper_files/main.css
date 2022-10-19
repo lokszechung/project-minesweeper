@@ -212,9 +212,6 @@ body{
 
 .cell:active{
   background-image: url("../assets/open.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
 }
 
 .mine-clicked, .flag.mine-clicked{
@@ -402,13 +399,6 @@ body{
   background-position: center;
 }
 
-#smiley:active{
-  background-image: url("../assets/smiley_click.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
 #smiley-click{
   background-image: url("../assets/smiley_click.png");
   background-size: cover;
@@ -430,23 +420,8 @@ body{
   background-position: center;
 }
 
-#lose:active{
-  background-image: url("../assets/dead_click.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
 #win{
   background-image: url("../assets/cool.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-
-#win:active {
-  background-image: url("../assets/cool_click.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

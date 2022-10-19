@@ -47,7 +47,7 @@ function init() {
     beginner: { 
       width: 8,
       height: 8,
-      mines: 10, 
+      mines: 2, 
     },
     intermediate: {
       width: 16,
@@ -89,6 +89,8 @@ function init() {
   const difficultyChoice = document.querySelectorAll('.difficulty')
 
   // TODO Global functions 
+
+
 
   function start(){
   
@@ -273,8 +275,6 @@ function init() {
     
     }
 
-    const hasNum = []
-
     // TODO win condition
     function winCondition(){
       difficultySetting = difficulty[choice]
@@ -282,7 +282,7 @@ function init() {
       if (cellCount !== difficulty[choice].mines){ //otherwise win and game over shows at the same time
         let notMines 
         notMines = cellCount - difficulty[choice].mines
-        const openedCells = cells.filter(cell => cell.id === 'opened' || openArray.includes(cell.id))
+        const openedCells = cells.filter(cell => cell.classList.contains('opened'))
         if (notMines === openedCells.length){
           notMines = 0
           setTimeout(() => {
@@ -403,7 +403,7 @@ function init() {
 
       timer = setInterval(() => {
         count += 0.1
-        // console.log(count)
+        console.log(count)
         if (count > 999){
           clearInterval(secondsUnit)
           clearInterval(secondsTen)
