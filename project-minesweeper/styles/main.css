@@ -61,27 +61,17 @@ body{
   width: 18px;
   background-image: url("../assets/corner_top_left.png");
   background-size: 100% 100%;
-  /* background-repeat: no-repeat; */
-  /* background-position: 0%; */
-  /* float: left; */
 }
 .top-border{
   height: 16.5px;
-  width: 100%;
   background-image: url("../assets/border_top.png");
   background-size: 100% 100%;
-  /* background-repeat: no-repeat; */
-  /* background-position: 0%; */
-  /* float: left; */
 }
 .top-right{
   height: 16.5px;
   width: 18px;
   background-image: url("../assets/corner_top_right.png");
   background-size: 100% 100%;
-  /* background-repeat: no-repeat; */
-  /* background-position: 0%; */
-  /* float: left; */
 }
 
 .layer-two{
@@ -109,7 +99,6 @@ body{
 }
 .middle-border{
   height: 16.5px;
-  width: 100%;
   background-image: url("../assets/border_bottom.png");
   background-size: 100% 100%;
 }
@@ -128,7 +117,6 @@ body{
 
 .fourth-layer-left, .fourth-layer-right{
   width: 18px; 
-  height: 100%;
   background-image: url("../assets/border_side.png");
   background-size: 100% 100%;
 }
@@ -147,7 +135,6 @@ body{
 }
 .bottom-border{
   height: 16.5px;
-  width: 100%;
   background-image: url("../assets/border_bottom.png");
   background-size: 100% 100%;
 }
@@ -221,16 +208,31 @@ body{
 }
 
 .mine-clicked, .flag.mine-clicked{
-  background-color: black;
+  background-image: url("../assets/mine.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.main-mine{
+  background-image: url("../assets/main_mine.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .flag{
-  background-color: red;
+  background-image: url("../assets/flag.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .opened{
-  background-color: blueviolet;
-  color: white;
+  background-image: url("../assets/open.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 #sec-unit, #sec-ten, #sec-hundred, #flag-unit,  #flag-ten, #flag-hundred {
@@ -323,6 +325,56 @@ body{
 
 .blank{
   background-image: url("../assets/blank.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#oneopen{
+  background-image: url("../assets/o1.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#twoopen{
+  background-image: url("../assets/o2.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+#threeopen{
+  background-image: url("../assets/o3.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+#fouropen{
+  background-image: url("../assets/o4.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+#fiveopen{
+  background-image: url("../assets/o5.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+#sixopen{
+  background-image: url("../assets/o6.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+#sevenopen{
+  background-image: url("../assets/o7.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+#eightopen{
+  background-image: url("../assets/o8.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

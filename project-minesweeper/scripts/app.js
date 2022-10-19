@@ -6,6 +6,8 @@ function init() {
   // TODO parent to appendChild to 
   const gridContainer = document.querySelector('.grid-container')
   const layerFour = document.querySelector('.layer-four')
+  const display = document.querySelector('.score-container')
+  const centralBorder = document.querySelectorAll('.central-border')
   // TODO timer which is also the score
   const timeScore = document.querySelector('.time-score')
   // TODO number of mines which is also number of flags available - depletes as flags or added back when unplaced
@@ -78,6 +80,8 @@ function init() {
   const flagHundred = document.querySelector('#flag-hundred')
   const timeArray = [ 'zeronum', 'onenum', 'twonum', 'threenum', 'fournum', 'fivenum', 'sixnum', 'sevennum', 'eightnum', 'ninenum' ]
 
+  const openArray = [ 'oneopen', 'twoopen', 'threeopen', 'fouropen', 'fiveopen', 'sixopen', 'sevenopen', 'eightopens' ]
+
   // TODO difficulty
 
   const difficultyChoice = document.querySelectorAll('.difficulty')
@@ -116,10 +120,9 @@ function init() {
       }
       gridContainer.style.width = `${difficulty[choice].width * 24}px`
       gridContainer.style.height = `${difficulty[choice].height * 24}px`
-      // gridContainer.style.width = '100%'
-      // gridContainer.style.height = '100%'
-      // layerFour.style.width = `${difficulty[choice].height * 24}px`
+      display.style.width = `${difficulty[choice].width * 24}px`
       layerFour.style.height = `${difficulty[choice].height * 24}px`
+      centralBorder.forEach(border => border.style.width = `${difficulty[choice].width * 24}px`)
 
       function randomMines(){  
         cells.forEach(cell => cell.classList.remove('mine')) 
@@ -235,12 +238,14 @@ function init() {
           }
         }) 
       } else {
-        target.innerHTML = minesAdjacent.length
+        target.removeAttribute('id')
+        target.id = openArray[minesAdjacent.length - 1]
       }
 
       if (classList.contains('mine')){
         const allMines = document.querySelectorAll('.mine')
         allMines.forEach(cell => cell.classList.add('mine-clicked'))
+        classList.add('main-mine')
         console.log('Game over')
         cells.forEach(cell => {
           cell.style.pointerEvents = 'none'
