@@ -5,6 +5,7 @@ function init() {
   // ** Elements **
   // TODO parent to appendChild to 
   const gridContainer = document.querySelector('.grid-container')
+  const layerFour = document.querySelector('.layer-four')
   // TODO timer which is also the score
   const timeScore = document.querySelector('.time-score')
   // TODO number of mines which is also number of flags available - depletes as flags or added back when unplaced
@@ -40,8 +41,8 @@ function init() {
   // TODO object for difficult
   const difficulty = {
     beginner: { 
-      width: 15,
-      height: 15,
+      width: 8,
+      height: 8,
       mines: 2, 
     },
     intermediate: {
@@ -115,6 +116,10 @@ function init() {
       }
       gridContainer.style.width = `${difficulty[choice].width * 24}px`
       gridContainer.style.height = `${difficulty[choice].height * 24}px`
+      // gridContainer.style.width = '100%'
+      // gridContainer.style.height = '100%'
+      // layerFour.style.width = `${difficulty[choice].height * 24}px`
+      layerFour.style.height = `${difficulty[choice].height * 24}px`
 
       function randomMines(){  
         cells.forEach(cell => cell.classList.remove('mine')) 
