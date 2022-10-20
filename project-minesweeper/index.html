@@ -11,20 +11,50 @@
       <div class="game-wrap">
         <div class="game drop">Game</div>
         <!-- onclick="gameDropdown()" -->
-        <div class="game-content">
+        <div class="game-content popup">
           <div class="game reset">Reset</div>
           <div class="game difficulty beginner" id="beginner">Beginner</div>
           <div class="game difficulty intermediate" id="intermediate">Intermediate</div>
           <div class="game difficulty expert" id="expert">Expert</div>
-          <div class="game difficulty custom" id="custom">Custom</div>
+          <div class="game difficulty custom" >Custom</div>
         </div>
       </div>
       <div class="help-wrap">
         <div class="help drop">Help</div>
-        <div class="help-content">
+        <div class="help-content popup">
           <div class="help how-to-play">How to Play</div>
         </div>
       </div>  
+      <div class="instructions pop">
+        <div class="instruct-wrap">
+          <p>Minesweeper is a game where mines are hidden in a grid of squares. Safe squares have numbers telling you how many mines touch the square. You can use the number clues to solve the game by opening all of the safe squares. If you click on a mine you lose the game!</p>
+          <p>The game ends when all safe squares have been opened. A counter shows the number of mines without flags, and a clock shows your time in seconds.</p>
+          <div class="close-button">Close</div>
+        </div>  
+      </div>
+      <div class="custom-form pop">
+        <div class="form-wrap">
+          <form action="" method="post" id="custom">
+            <div class="form-field">
+              <label for="width">Width</label>
+              <input type="number" name="width" class="custom-width" required>
+            </div>
+            <div class="form-field">
+              <label for="height">Height</label>
+              <input type="number" name="height" class="custom-height" required>
+            </div>
+            <div class="form-field">
+              <label for="mines">Mines</label>
+              <input type="number" name="mines" class="custom-mines" required>
+            </div>
+            <div class="button-wrap">
+              <div class="close-button">Cancel</div>
+              <button class="apply" id="custom">Apply</button>
+            </div>
+          </form>
+        </div>
+        </div>  
+      </div>
     </div>
     <div class="game-container">
       <div class="border-wrapper layer-one">
@@ -68,9 +98,6 @@
         <div class="bottom-border central-border"></div>
         <div class="bottom-right"></div>
       </div>
-    </div>
-      
-      
     </div>
   </div>  
 </body>

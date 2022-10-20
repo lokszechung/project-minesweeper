@@ -21,7 +21,10 @@ function init() {
   const gameButton = document.querySelector('.game')
   const helpContent = document.querySelector('.help-content')
   const gameContent = document.querySelector('.game-content')
-  
+  const howToPlayButton = document.querySelector('.how-to-play')
+  const instructions = document.querySelector('.instructions')
+  const closeButton = document.querySelector('.close-button')
+
   function gameDropdown(){
     gameContent.classList.toggle('show')
   }
@@ -32,6 +35,12 @@ function init() {
     helpContent.classList.toggle('show')
   }
   helpButton.addEventListener('click', helpDropdown)
+
+  function instruct(){
+    instructions.style.display = 'block'
+    console.log('how to clicked')
+  }
+  howToPlayButton.addEventListener('click', instruct)
 
   // ! below will close dropdown when only outside window is clicked
   // function clickOut(e){
@@ -55,8 +64,18 @@ function init() {
     }
   }
   window.addEventListener('click', clickOutHelp)
+
+  function closeInstruct(){
+    instructions.style.display = 'none'
+  }
+  closeButton.addEventListener('click', closeInstruct)
   
-    
+  // TODO Custom difficulty form
+
+  const customWidth = document.querySelector('.custom-width')
+  const customHeight = document.querySelector('.custom-height')
+  const customMines = document.querySelector('.custom-mines')
+  const applyCustom = document.querySelector('.apply')
   
   // TODO object for difficult
   const difficulty = {
@@ -77,12 +96,33 @@ function init() {
     },
 
     custom: {
-      width: '',
-      height: '',
-      mines: '',
+      width: 0,
+      height: 0,
+      mines: 0,
     },
+    
+    addCustom(e){
+      e.preventDefault() 
+      console.log(customWidth.value)
+      console.log(difficulty)
+      difficulty.custom.width = customWidth.value
+      difficulty.custom.height = customHeight.value
+      difficulty.custom.mines = customMines.value
+      difficultyOfGame(e)
+    },
+
   }
-  
+  applyCustom.addEventListener('click', difficulty.addCustom)
+  console.log(difficulty)
+  console.log(difficulty.intermediate.width)
+
+
+
+  // const customForm = document.forms.custom
+  // const formData = new FormData(customForm)
+  // const widthw = formData.get('width')
+  // console.log(widthw)
+
   
 
   let cell
@@ -106,294 +146,293 @@ function init() {
 
   // TODO Global functions 
 
-  function start(){
+  // function start(){
   
-    let choice = 'beginner'
-    let difficultySetting = difficulty[choice]
-    let cellCount = difficulty[choice].width * difficulty[choice].height
-    
+  let choice = 'beginner'
+  let difficultySetting = difficulty[choice]
+  let cellCount = difficulty[choice].width * difficulty[choice].height
+
+  createGrid()
+
+  cells.forEach(cell => cell.addEventListener('click', reveal))
+
+  cells.forEach(cell => cell.addEventListener('contextmenu', rightClick))
+
+  difficultyChoice.forEach(choice => choice.addEventListener('click', difficultyOfGame))
+
+  resetButton.addEventListener('click', reset)
+
+
+  // TODO create grid using JS
+  function createGrid(){
+    gridContainer.innerHTML = ''
+    cells = []
+    for (let i = 0; i < cellCount; i++){
+      const cell = document.createElement('div')
+      cell.classList.add('cell')
+      cell.dataset.index = i
+      gridContainer.appendChild(cell)
+      cells.push(cell)
+    }
+    gridContainer.style.width = `${difficulty[choice].width * 24}px`
+    gridContainer.style.height = `${difficulty[choice].height * 24}px`
+    display.style.width = `${difficulty[choice].width * 24}px`
+    layerFour.style.height = `${difficulty[choice].height * 24}px`
+    centralBorder.forEach(border => border.style.width = `${difficulty[choice].width * 24}px`)
+
+    function randomMines(){  
+      cells.forEach(cell => cell.classList.remove('mine')) 
+      minesPlaced = 0
+      minePlacement = []  
+      while (minesPlaced < difficulty[choice].mines){
+        const random = Math.floor(Math.random() * cells.length)
+        const randomIndex = cells[random]
+        if (!minePlacement.some(pos => pos === randomIndex)){
+          minePlacement.push(randomIndex)
+          minesPlaced++
+        }    
+      }
+      minePlacement.forEach(cell => cell.classList.add('mine'))  
+    }
+    emoji.id = 'smiley'
+
+    randomMines()
+
+    countFlags()
+
+  }
+
+  // TODO pick difficulty
+  function difficultyOfGame(e){
+    const target = e.target || e
+    choice = target.id
+    difficultySetting = difficulty[choice]
+    cellCount = difficulty[choice].width * difficulty[choice].height
+
     createGrid()
 
+    resetTimer()
+
     cells.forEach(cell => cell.addEventListener('click', reveal))
-    
+
     cells.forEach(cell => cell.addEventListener('contextmenu', rightClick))
-    
-    difficultyChoice.forEach(choice => choice.addEventListener('click', difficultyOfGame))
-    
-    resetButton.addEventListener('click', reset)
+  }
 
+  // TODO reset game button
+  function reset(){
+    difficultySetting = difficulty[choice]
+    const cellCount = difficulty[choice].width * difficulty[choice].height
+    createGrid()
+    executed = false
+    cells.forEach(cell => cell.addEventListener('click', reveal))
+    cells.forEach(cell => cell.addEventListener('contextmenu', rightClick))
+    console.log(executed)
+    resetTimer()
+  }
 
-    // TODO create grid using JS
-    function createGrid(){
-      gridContainer.innerHTML = ''
-      cells = []
-      for (let i = 0; i < cellCount; i++){
-        const cell = document.createElement('div')
-        cell.classList.add('cell')
-        cell.dataset.index = i
-        gridContainer.appendChild(cell)
-        cells.push(cell)
+  emoji.addEventListener('click', reset)
+
+  // TODO open squares recursive function and main game logic 
+  function reveal(e){
+
+    difficultySetting = difficulty[choice]
+    const cellCount = difficulty[choice].width * difficulty[choice].height
+
+    const target = e.target || e 
+    const { dataset, classList } = target
+    const currentCell = dataset.index   
+    const adjacent = []
+    let minesAdjacent = []
+
+    // TODO Numbered cell 
+
+    if (classList.contains('flag')){
+      return
+    }  
+
+    // function nextToMine(){
+    if (!classList.contains('mine')){
+      console.log('before---> ' + executed)
+      timingScore()
+      executed = true
+      console.log('after---> ' + executed)
+      target.id = 'opened'
+      // check right
+      if (currentCell % difficulty[choice].width !== difficulty[choice].width - 1){
+        adjacent.push(cells[parseFloat(currentCell) + 1])
       }
-      gridContainer.style.width = `${difficulty[choice].width * 24}px`
-      gridContainer.style.height = `${difficulty[choice].height * 24}px`
-      display.style.width = `${difficulty[choice].width * 24}px`
-      layerFour.style.height = `${difficulty[choice].height * 24}px`
-      centralBorder.forEach(border => border.style.width = `${difficulty[choice].width * 24}px`)
+      // check left
+      if (currentCell % difficulty[choice].width !== 0){
+        adjacent.push(cells[parseFloat(currentCell) - 1])
+      }
+      // check up
+      if (currentCell >= difficulty[choice].width){
+        adjacent.push(cells[parseFloat(currentCell) - difficulty[choice].width])
+      }
+      // check down 
+      if (currentCell < cellCount - difficulty[choice].width){
+        adjacent.push(cells[parseFloat(currentCell) + difficulty[choice].width])
+      }
+      // check up left
+      if (currentCell >= difficulty[choice].width && currentCell % difficulty[choice].width !== 0){
+        adjacent.push(cells[parseFloat(currentCell) - 1 - difficulty[choice].width])
+      }
+      // check up right
+      if (currentCell >= difficulty[choice].width && currentCell % difficulty[choice].width !== difficulty[choice].width - 1){
+        adjacent.push(cells[parseFloat(currentCell) + 1 - difficulty[choice].width])
+      }
+      // check down left
+      if (currentCell < cellCount - difficulty[choice].width && currentCell % difficulty[choice].width !== 0){
+        adjacent.push(cells[parseFloat(currentCell) - 1 + difficulty[choice].width]) 
+      }
+      // check down right
+      if (currentCell < cellCount - difficulty[choice].width && currentCell % difficulty[choice].width !== difficulty[choice].width - 1){
+        adjacent.push(cells[parseFloat(currentCell) + 1 + difficulty[choice].width])
+      }
+      
+      minesAdjacent = adjacent.filter(cell => cell.classList.contains('mine'))
+    }  
+    // }
+    // nextToMine()  
 
-      function randomMines(){  
-        cells.forEach(cell => cell.classList.remove('mine')) 
-        minesPlaced = 0
-        minePlacement = []  
-        while (minesPlaced < difficulty[choice].mines){
-          const random = Math.floor(Math.random() * cells.length)
-          const randomIndex = cells[random]
-          if (!minePlacement.some(pos => pos === randomIndex)){
-            minePlacement.push(randomIndex)
-            minesPlaced++
-          }    
+    if (minesAdjacent.length === 0){
+      adjacent.forEach(cell => {
+        if (cell.id !== 'opened'){
+          reveal(cell) 
         }
-        minePlacement.forEach(cell => cell.classList.add('mine'))  
-      }
-      emoji.id = 'smiley'
-
-      randomMines()
-
-      countFlags()
-
-      // gridContainer.addEventListener('click' || 'contextmenu', timingScore, { once: true })
+      }) 
+    } else {
+      target.removeAttribute('id')
+      target.id = openArray[minesAdjacent.length - 1]
     }
 
-    // TODO pick difficulty
-    function difficultyOfGame(e){
-      const target = e.target || e
-      choice = target.id
-      difficultySetting = difficulty[choice]
-      cellCount = difficulty[choice].width * difficulty[choice].height
-
-      createGrid()
-
-      resetTimer()
-
-      cells.forEach(cell => cell.addEventListener('click', reveal))
-
-      cells.forEach(cell => cell.addEventListener('contextmenu', rightClick))
+    if (classList.contains('mine')){
+      const allMines = document.querySelectorAll('.mine')
+      allMines.forEach(cell => cell.classList.add('mine-clicked'))
+      classList.add('main-mine')
+      console.log('Game over')
+      emoji.id = 'lose'
+      cells.forEach(cell => {
+        cell.style.pointerEvents = 'none'
+      })
+      setTimeout(() => {
+        clearInterval(timer)
+        clearInterval(secondsUnit)
+        clearInterval(secondsTen)
+        clearInterval(secondsHundred)
+      }, 1)
     }
 
-    // TODO reset game button
-    function reset(){
-      difficultySetting = difficulty[choice]
-      const cellCount = difficulty[choice].width * difficulty[choice].height
-      createGrid()
-      executed = false
-      cells.forEach(cell => cell.addEventListener('click', reveal))
-      cells.forEach(cell => cell.addEventListener('contextmenu', rightClick))
-      console.log(executed)
-      resetTimer()
-    }
-    
-    emoji.addEventListener('click', reset)
+    winCondition()
 
-    // TODO open squares recursive function and main game logic 
-    function reveal(e){
 
-      difficultySetting = difficulty[choice]
-      const cellCount = difficulty[choice].width * difficulty[choice].height
-    
-      const target = e.target || e 
-      const { dataset, classList } = target
-      const currentCell = dataset.index   
-      const adjacent = []
-      let minesAdjacent = []
+  }
 
-      // TODO Numbered cell 
+  const hasNum = []
 
-      if (classList.contains('flag')){
-        return
-      }  
-    
-      // function nextToMine(){
-      if (!classList.contains('mine')){
-        console.log('before---> ' + executed)
-        timingScore()
-        executed = true
-        console.log('after---> ' + executed)
-        target.id = 'opened'
-        // check right
-        if (currentCell % difficulty[choice].width !== difficulty[choice].width - 1){
-          adjacent.push(cells[parseFloat(currentCell) + 1])
-        }
-        // check left
-        if (currentCell % difficulty[choice].width !== 0){
-          adjacent.push(cells[parseFloat(currentCell) - 1])
-        }
-        // check up
-        if (currentCell >= difficulty[choice].width){
-          adjacent.push(cells[parseFloat(currentCell) - difficulty[choice].width])
-        }
-        // check down 
-        if (currentCell < cellCount - difficulty[choice].width){
-          adjacent.push(cells[parseFloat(currentCell) + difficulty[choice].width])
-        }
-        // check up left
-        if (currentCell >= difficulty[choice].width && currentCell % difficulty[choice].width !== 0){
-          adjacent.push(cells[parseFloat(currentCell) - 1 - difficulty[choice].width])
-        }
-        // check up right
-        if (currentCell >= difficulty[choice].width && currentCell % difficulty[choice].width !== difficulty[choice].width - 1){
-          adjacent.push(cells[parseFloat(currentCell) + 1 - difficulty[choice].width])
-        }
-        // check down left
-        if (currentCell < cellCount - difficulty[choice].width && currentCell % difficulty[choice].width !== 0){
-          adjacent.push(cells[parseFloat(currentCell) - 1 + difficulty[choice].width]) 
-        }
-        // check down right
-        if (currentCell < cellCount - difficulty[choice].width && currentCell % difficulty[choice].width !== difficulty[choice].width - 1){
-          adjacent.push(cells[parseFloat(currentCell) + 1 + difficulty[choice].width])
-        }
-        
-        minesAdjacent = adjacent.filter(cell => cell.classList.contains('mine'))
-      }  
-      // }
-      // nextToMine()  
-    
-      if (minesAdjacent.length === 0){
-        adjacent.forEach(cell => {
-          if (cell.id !== 'opened'){
-            reveal(cell) 
-          }
-        }) 
-      } else {
-        target.removeAttribute('id')
-        target.id = openArray[minesAdjacent.length - 1]
-      }
-
-      if (classList.contains('mine')){
-        const allMines = document.querySelectorAll('.mine')
-        allMines.forEach(cell => cell.classList.add('mine-clicked'))
-        classList.add('main-mine')
-        console.log('Game over')
-        emoji.id = 'lose'
-        cells.forEach(cell => {
-          cell.style.pointerEvents = 'none'
-        })
+  // TODO win condition
+  function winCondition(){
+    difficultySetting = difficulty[choice]
+    const cellCount = difficulty[choice].width * difficulty[choice].height
+    if (cellCount !== difficulty[choice].mines){ //otherwise win and game over shows at the same time
+      let notMines 
+      notMines = cellCount - difficulty[choice].mines
+      const openedCells = cells.filter(cell => cell.id === 'opened' || openArray.includes(cell.id))
+      if (notMines === openedCells.length){
+        notMines = 0
         setTimeout(() => {
           clearInterval(timer)
           clearInterval(secondsUnit)
           clearInterval(secondsTen)
           clearInterval(secondsHundred)
         }, 1)
-      }
-
-      winCondition()
-
-    
-    }
-
-    const hasNum = []
-
-    // TODO win condition
-    function winCondition(){
-      difficultySetting = difficulty[choice]
-      const cellCount = difficulty[choice].width * difficulty[choice].height
-      if (cellCount !== difficulty[choice].mines){ //otherwise win and game over shows at the same time
-        let notMines 
-        notMines = cellCount - difficulty[choice].mines
-        const openedCells = cells.filter(cell => cell.id === 'opened' || openArray.includes(cell.id))
-        if (notMines === openedCells.length){
-          notMines = 0
-          setTimeout(() => {
-            clearInterval(timer)
-            clearInterval(secondsUnit)
-            clearInterval(secondsTen)
-            clearInterval(secondsHundred)
-          }, 1)
-          !count ? console.log('Winner, you took 0.1 seconds.') : console.log(`Winner, you took ${Math.round(count * 10) / 10} seconds.`)
-          emoji.id = 'win'
-          const allMines = document.querySelectorAll('.mine')
-          allMines.forEach(cell => cell.classList.add('flag'))
-          cells.forEach(cell => {
-            cell.style.pointerEvents = 'none'
-          })
-        }
-      }  
-    }
-
-    // TODO tight click toggle flag
-    function rightClick(e){
-      e.preventDefault()
-      e.target.classList.toggle('flag')
-      countFlags()
-    }
-    
-    // TODO flag counter
-    function countFlags(){
-      flaggedCells = cells.filter(cell => cell.classList.contains('flag'))
-      flags = difficulty[choice].mines - flaggedCells.length
-      if (flags >= 0 && flags < 10){
-        flagTen.removeAttribute('class')
-        flagTen.classList.add('zeronum')
-        flagUnit.removeAttribute('class')
-        flagUnit.classList.add(timeArray[flags])
-      }  
-      if (flags >= 10){
-        const minesString = flags.toString()
-        const numSplitArray = minesString.split('')
-        flagHundred.removeAttribute('class')
-        flagHundred.classList.add('zeronum')
-        flagTen.removeAttribute('class')
-        flagUnit.removeAttribute('class')
-        flagTen.classList.add(timeArray[numSplitArray[0]])
-        flagUnit.classList.add(timeArray[numSplitArray[1]])
-      }
-      if (flags >= 100){
-        const minesString = flags.toString()
-        const numSplitArray = minesString.split('')
-        flagUnit.removeAttribute('class')
-        flagTen.removeAttribute('class')
-        flagTen.removeAttribute('class')
-        flagHundred.classList.add(timeArray[numSplitArray[0]])
-        flagTen.classList.add(timeArray[numSplitArray[1]])
-        flagUnit.classList.add(timeArray[numSplitArray[2]])
-      }
-      if (flags < 0 && flags > -10){
-        flagHundred.removeAttribute('class')
-        flagHundred.classList.add('blank')
-        flagTen.removeAttribute('class')
-        flagTen.classList.add('minus')
-        flagUnit.removeAttribute('class')
-        flagUnit.classList.add(timeArray[Math.abs(flags)])
-      }
-      if (flags <= -10){
-        const minesString = Math.abs(flags).toString()
-        const numSplitArray = minesString.split('')
-        flagHundred.removeAttribute('class')
-        flagHundred.classList.add('minus')
-        flagTen.removeAttribute('class')
-        flagUnit.removeAttribute('class')
-        flagTen.classList.add(timeArray[numSplitArray[0]])
-        flagUnit.classList.add(timeArray[numSplitArray[1]])
-      }
-    }
-    
-    
-    function emojiMouseDown(e){
-      if (emoji.id !== 'lose' && emoji.id !== 'win'){
-        if (!e.target.id && !e.target.classList.contains('flag')){
-          emoji.id = 'shock'
-        }  
-      }  
-    }      
-    gridContainer.addEventListener('mousedown', emojiMouseDown)
-
-    function emojiMouseUp(){
-      if (emoji.id !== 'lose' && emoji.id !== 'win'){
-        emoji.id = 'smiley'
+        !count ? console.log('Winner, you took 0.1 seconds.') : console.log(`Winner, you took ${Math.round(count * 10) / 10} seconds.`)
+        emoji.id = 'win'
+        const allMines = document.querySelectorAll('.mine')
+        allMines.forEach(cell => cell.classList.add('flag'))
+        cells.forEach(cell => {
+          cell.style.pointerEvents = 'none'
+        })
       }
     }  
-    gridContainer.addEventListener('mouseup', emojiMouseUp)
-
   }
-  start()
+
+  // TODO tight click toggle flag
+  function rightClick(e){
+    e.preventDefault()
+    e.target.classList.toggle('flag')
+    countFlags()
+  }
+
+  // TODO flag counter
+  function countFlags(){
+    flaggedCells = cells.filter(cell => cell.classList.contains('flag'))
+    flags = difficulty[choice].mines - flaggedCells.length
+    if (flags >= 0 && flags < 10){
+      flagTen.removeAttribute('class')
+      flagTen.classList.add('zeronum')
+      flagUnit.removeAttribute('class')
+      flagUnit.classList.add(timeArray[flags])
+    }  
+    if (flags >= 10){
+      const minesString = flags.toString()
+      const numSplitArray = minesString.split('')
+      flagHundred.removeAttribute('class')
+      flagHundred.classList.add('zeronum')
+      flagTen.removeAttribute('class')
+      flagUnit.removeAttribute('class')
+      flagTen.classList.add(timeArray[numSplitArray[0]])
+      flagUnit.classList.add(timeArray[numSplitArray[1]])
+    }
+    if (flags >= 100){
+      const minesString = flags.toString()
+      const numSplitArray = minesString.split('')
+      flagUnit.removeAttribute('class')
+      flagTen.removeAttribute('class')
+      flagTen.removeAttribute('class')
+      flagHundred.classList.add(timeArray[numSplitArray[0]])
+      flagTen.classList.add(timeArray[numSplitArray[1]])
+      flagUnit.classList.add(timeArray[numSplitArray[2]])
+    }
+    if (flags < 0 && flags > -10){
+      flagHundred.removeAttribute('class')
+      flagHundred.classList.add('blank')
+      flagTen.removeAttribute('class')
+      flagTen.classList.add('minus')
+      flagUnit.removeAttribute('class')
+      flagUnit.classList.add(timeArray[Math.abs(flags)])
+    }
+    if (flags <= -10){
+      const minesString = Math.abs(flags).toString()
+      const numSplitArray = minesString.split('')
+      flagHundred.removeAttribute('class')
+      flagHundred.classList.add('minus')
+      flagTen.removeAttribute('class')
+      flagUnit.removeAttribute('class')
+      flagTen.classList.add(timeArray[numSplitArray[0]])
+      flagUnit.classList.add(timeArray[numSplitArray[1]])
+    }
+  }
+
+
+  function emojiMouseDown(e){
+    if (emoji.id !== 'lose' && emoji.id !== 'win'){
+      if (!e.target.id && !e.target.classList.contains('flag')){
+        emoji.id = 'shock'
+      }  
+    }  
+  }      
+  gridContainer.addEventListener('mousedown', emojiMouseDown)
+
+  function emojiMouseUp(){
+    if (emoji.id !== 'lose' && emoji.id !== 'win'){
+      emoji.id = 'smiley'
+    }
+  }  
+  gridContainer.addEventListener('mouseup', emojiMouseUp)
+
+  // }
+  // start()
 
   // TODO declare variables for timerScore 
   let timer
