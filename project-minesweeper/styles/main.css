@@ -15,9 +15,9 @@ body{
   margin: auto;
 }
 
-/* Game dropdown */
+/* Game and help dropdown */
 
-.game{
+.game, .help{
   cursor: default;
 }
 
@@ -36,17 +36,27 @@ body{
   color: white;
 }
 
-.game-content{
+.game-content, .help-content{
   cursor: auto;
   display: none;
   position: absolute;
   background-color: #f1f1f1;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
+  /* z-index: 1; */
+}
+
+.help-content{
+  position: absolute;
+
 }
 
 .game-content div:hover {
+  background-color: blue;
+  color: white;
+}
+
+.help-content div:hover {
   background-color: blue;
   color: white;
 }
@@ -55,6 +65,9 @@ body{
   display: block;
 }
 
+.menu-bar{
+  display: flex;
+}
 
 /***  border styling ***/
 
@@ -232,6 +245,13 @@ body{
 }
 
 .flag{
+  background-image: url("../assets/flag.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.flag:active{
   background-image: url("../assets/flag.png");
   background-size: cover;
   background-repeat: no-repeat;

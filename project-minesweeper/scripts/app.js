@@ -19,12 +19,19 @@ function init() {
   // TODO buttons for help/options - to choose difficulty or reset
   const helpButton = document.querySelector('.help')
   const gameButton = document.querySelector('.game')
+  const helpContent = document.querySelector('.help-content')
   const gameContent = document.querySelector('.game-content')
+  
   function gameDropdown(){
     gameContent.classList.toggle('show')
   }
 
   gameButton.addEventListener('click', gameDropdown)
+
+  function helpDropdown(){
+    helpContent.classList.toggle('show')
+  }
+  helpButton.addEventListener('click', helpDropdown)
 
   // ! below will close dropdown when only outside window is clicked
   // function clickOut(e){
@@ -35,12 +42,21 @@ function init() {
   // window.addEventListener('click', clickOut)
   
   // ! below will close dropdown when anything is clicked
-  function clickOut(e){
+  function clickOutGame(e){
     if (e.target !== gameButton){
       gameContent.classList.remove('show')
     }
   }
-  window.addEventListener('click', clickOut)
+  window.addEventListener('click', clickOutGame)
+
+  function clickOutHelp(e){
+    if (e.target !== helpButton){
+      helpContent.classList.remove('show')
+    }
+  }
+  window.addEventListener('click', clickOutHelp)
+  
+    
   
   // TODO object for difficult
   const difficulty = {
@@ -360,15 +376,21 @@ function init() {
     }
     
     
-    // function cellMouseDown(e){
-    //   e.target.id = 'opened'
-    //   console.log('mouse down')
-    // }      
-    // cells.forEach(cell => cell.addEventListener('mousedown', cellMouseDown))
-    // function cellMouseUp(e){
-    //   e.target.removeAttribute('id')
-    // }
-    // cells.forEach(cell => cell.addEventListener('mouseup', cellMouseUp))
+    function emojiMouseDown(e){
+      if (emoji.id !== 'lose' && emoji.id !== 'win'){
+        if (!e.target.id && !e.target.classList.contains('flag')){
+          emoji.id = 'shock'
+        }  
+      }  
+    }      
+    gridContainer.addEventListener('mousedown', emojiMouseDown)
+
+    function emojiMouseUp(){
+      if (emoji.id !== 'lose' && emoji.id !== 'win'){
+        emoji.id = 'smiley'
+      }
+    }  
+    gridContainer.addEventListener('mouseup', emojiMouseUp)
 
   }
   start()
@@ -485,14 +507,6 @@ window.addEventListener('DOMContentLoaded', init)
 // ** Execution ** 
 
 
-function flagCounting(){
-  // flag count to track flag class on grid
-}
-// function gameOver(){
-//   cells.forEach(cell => cell.addEventListener('click', mineClicked))
-//   console.log('Game over')
-// }
-
 
 
 
@@ -510,9 +524,7 @@ function win(){
   // restart option (or automatically cleared)
   // ! Stretch: some animations 
 }
-// function resetClick(){
-// reset the game to chosen difficulty
-// }
+
 
 
 // ** Events **
@@ -551,12 +563,10 @@ function win(){
 // ! Stretch: allow player to generate custom board size and mine count  
 // }
 
-// function nothing(e){
-//   if (e.target.classList.contains('flag')){
-//     return
-// }
 
 
 
-//flagged doesnt open 
 //timer only logs counts if i am on the page, but clock continues
+//mine can be clicked on first go
+//custom levels
+//high scores
