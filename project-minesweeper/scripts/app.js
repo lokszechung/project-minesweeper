@@ -6,10 +6,6 @@ function init() {
   // TODO parent to appendChild to 
   const gridContainer = document.querySelector('.grid-container')
   const gameContainer = document.querySelector('.game-container')
-  let cell
-  let cells = []
-  let minesPlaced = 0
-  let minePlacement = []
   const layerFour = document.querySelector('.layer-four')
   const display = document.querySelector('.score-container')
   const centralBorder = document.querySelectorAll('.central-border')
@@ -134,7 +130,7 @@ function init() {
     beginner: { 
       width: 8,
       height: 8,
-      mines: 6, 
+      mines: 10, 
     },
     intermediate: {
       width: 16,
@@ -169,6 +165,10 @@ function init() {
   
   applyCustom.addEventListener('click', difficulty.addCustom)
 
+  let cell
+  let cells = []
+  let minesPlaced = 0
+  let minePlacement = []
 
   let flags 
   let flaggedCells = []
@@ -176,7 +176,6 @@ function init() {
   const flagTen = document.querySelector('#flag-ten')
   const flagHundred = document.querySelector('#flag-hundred')
   const timeArray = [ 'zeronum', 'onenum', 'twonum', 'threenum', 'fournum', 'fivenum', 'sixnum', 'sevennum', 'eightnum', 'ninenum' ]
-
   const openArray = [ 'oneopen', 'twoopen', 'threeopen', 'fouropen', 'fiveopen', 'sixopen', 'sevenopen', 'eightopens' ]
 
   // TODO difficulty
@@ -184,8 +183,6 @@ function init() {
   const difficultyChoice = document.querySelectorAll('.difficulty')
 
   // TODO Global functions 
-
-  // function start(){
   
   let choice = 'beginner'
   let difficultySetting = difficulty[choice]
@@ -195,7 +192,7 @@ function init() {
 
   cells.forEach(cell => cell.addEventListener('click', reveal))
 
-  cells.forEach(cell => cell.addEventListener('contextmenu', rightClick))
+  cells.forEach(cell => cell.addEventListener('contextmenu', rightClickFlag))
 
   difficultyChoice.forEach(choice => choice.addEventListener('click', difficultyOfGame))
 
@@ -240,7 +237,7 @@ function init() {
     countFlags()
 
   }
-
+// before
   // TODO pick difficulty
   function difficultyOfGame(e){
     const target = e.target || e
@@ -254,7 +251,7 @@ function init() {
 
     cells.forEach(cell => cell.addEventListener('click', reveal))
 
-    cells.forEach(cell => cell.addEventListener('contextmenu', rightClick))
+    cells.forEach(cell => cell.addEventListener('contextmenu', rightClickFlag))
   }
 
   // TODO reset game button
@@ -264,7 +261,7 @@ function init() {
     createGrid()
     executed = false
     cells.forEach(cell => cell.addEventListener('click', reveal))
-    cells.forEach(cell => cell.addEventListener('contextmenu', rightClick))
+    cells.forEach(cell => cell.addEventListener('contextmenu', rightClickFlag))
     console.log(executed)
     resetTimer()
   }
@@ -285,9 +282,9 @@ function init() {
     let minesAdjacent = []
 
     // TODO Numbered cell 
-    if (gameContent.style.display === 'block' || helpContent.style.display === 'block' || instructions.style.display === 'block' || customForm.style.display === 'block'){
-      return
-    } 
+    // if (gameContent.style.display === 'block' || helpContent.style.display === 'block' || instructions.style.display === 'block' || customForm.style.display === 'block'){
+    //   return
+    // } 
 
     if (classList.contains('flag')){
       return
@@ -297,7 +294,7 @@ function init() {
     if (!classList.contains('mine')){
       timingScore()
       executed = true
-      target.id = 'opened'
+      classList.add('opened')
       // check right
       console.log(currentCell)
       console.log(difficulty[choice].width)
@@ -333,20 +330,18 @@ function init() {
         adjacent.push(cells[parseFloat(currentCell) + 1 + difficulty[choice].width])
       }
       minesAdjacent = adjacent.filter(cell => cell.classList.contains('mine'))
-
     }  
-    // }
-    // nextToMine()  
+    console.log(cells)
 
     if (minesAdjacent.length === 0){
       adjacent.forEach(cell => {
-        if (cell.id !== 'opened'){
+        if (!cell.classList.contains('opened')){
           reveal(cell) 
         }
       }) 
     } else {
-      target.removeAttribute('id')
-      target.id = openArray[minesAdjacent.length - 1]
+      // target.removeAttribute('value')
+      target.classList.add(openArray[minesAdjacent.length - 1])
     }
 
     if (classList.contains('mine')){
@@ -367,8 +362,6 @@ function init() {
     }
 
     winCondition()
-
-
   }
 
   const hasNum = []
@@ -380,7 +373,7 @@ function init() {
     if (cellCount !== difficulty[choice].mines){ //otherwise win and game over shows at the same time
       let notMines 
       notMines = cellCount - difficulty[choice].mines
-      const openedCells = cells.filter(cell => cell.id === 'opened' || openArray.includes(cell.id))
+      const openedCells = cells.filter(cell => cell.classList.contains('opened'))
       if (notMines === openedCells.length){
         notMines = 0
         setTimeout(() => {
@@ -389,7 +382,6 @@ function init() {
           clearInterval(secondsTen)
           clearInterval(secondsHundred)
         }, 1)
-        // let winTime 
         !count ? count = 0.1 : count = Math.round(count * 10) / 10
         timeWon.innerHTML = count
         diffChoice.innerHTML = choice
@@ -407,7 +399,7 @@ function init() {
   }
 
   // TODO tight click toggle flag
-  function rightClick(e){
+  function rightClickFlag(e){
     e.preventDefault()
     if (e.target.id !== 'opened' && !openArray.includes(e.target.id)){
       e.target.classList.toggle('flag')
@@ -483,9 +475,6 @@ function init() {
     }
   }  
   gridContainer.addEventListener('mouseup', emojiMouseUp)
-
-  // }
-  // start()
 
   // TODO declare variables for timerScore 
   let timer
@@ -599,39 +588,13 @@ window.addEventListener('DOMContentLoaded', init)
 
 
 
-
-
-// function gameOver(){
-// clearInterval
-// game over overlay
-// restart option
-// ! Stretch: some animations 
-// }
-
-function win(){
-  // win overlay
-  // clearInterval
-  // display score and show high scores
-  // restart option (or automatically cleared)
-  // ! Stretch: some animations 
-}
-
-
-
 // ** Events **
 
 
 // 999 seconds goes to 000
-
-
-
-
-
-
-
-
 //timer only logs counts if i am on the page, but clock continues
 //mine can be clicked on first go
 //high scores
-//if a menu is opened up, click anywhere to close it, but the game will also trigger
+//on the custom diff, if press cancel, breaks the game
+//if a menu is opened up, click anywhere to close it, but the game will also trigger if a square is clicked, or reset if the reset button is clicked
 

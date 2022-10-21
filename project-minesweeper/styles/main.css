@@ -8,6 +8,10 @@ body{
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background-image: url("../assets/wallpaper.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .full-container{
@@ -15,8 +19,12 @@ body{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: auto;
+  /* margin: auto; */
   /* min-width */
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .clickable{
@@ -485,7 +493,7 @@ input{
   background-position: center;
 }
 
-#opened{
+.opened{
   background-image: url("../assets/open.png");
   background-size: cover;
   background-repeat: no-repeat;
@@ -587,50 +595,50 @@ input{
   background-position: center;
 }
 
-#oneopen{
+.oneopen{
   background-image: url("../assets/o1.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-#twoopen{
+.twoopen{
   background-image: url("../assets/o2.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
-#threeopen{
+.threeopen{
   background-image: url("../assets/o3.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
-#fouropen{
+.fouropen{
   background-image: url("../assets/o4.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
-#fiveopen{
+.fiveopen{
   background-image: url("../assets/o5.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
-#sixopen{
+.sixopen.{
   background-image: url("../assets/o6.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
-#sevenopen{
+.sevenopen.{
   background-image: url("../assets/o7.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
-#eightopen{
+.eightopen.{
   background-image: url("../assets/o8.png");
   background-size: cover;
   background-repeat: no-repeat;
