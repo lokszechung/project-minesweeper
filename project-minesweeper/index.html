@@ -72,16 +72,19 @@
             <div class="form-wrap">
               <form action="" method="post" id="customDiff">
                 <div class="form-field">
-                  <label for="width">Width (must be larger than 6)</label>
-                  <input type="number" name="width" class="custom-width" min="7" max="40" required>
+                  <label for="width">Width (must be between 7 and 30)</label>
+                  <input type="number" name="width" class="custom-width" min="7" max="30" placeholder="7-30" required>
                 </div>
                 <div class="form-field">
-                  <label for="height">Height (must be larger than 4)</label>
-                  <input type="number" name="height" class="custom-height" min="4" max="40" required>
+                  <label for="height">Height (must be between 4 and 30)</label>
+                  <input type="number" name="height" class="custom-height" min="4" max="24" placeholder="4-24" required>
                 </div>
                 <div class="form-field">
-                  <label for="mines">Mines (must be less than (width-1)*(height-1))</label>
+                  <label for="mines">Mines (must be between 1 and (width-1)*(height-1))</label>
+                  <!-- <div class="mine-choose"> -->
                   <input type="number" name="mines" class="custom-mines" min="1" max="99" required>
+                    <!-- <p class="error">Too many mines, please choose less than <span class="mines-allowed"></span></p> -->
+                  <!-- </div> -->
                 </div>
                 <div class="button-wrap">
                   <!-- <div class="cancel">Cancel</div> -->

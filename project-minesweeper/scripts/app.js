@@ -1,6 +1,4 @@
 function init() {
-  // TODO do we have to think about mobile users?
-  // TODO githubs
 
   // ** Elements **
   // TODO parent to appendChild to 
@@ -32,6 +30,8 @@ function init() {
   const diffChoice = document.querySelector('.diff-choice')
   const winnerBox = document.querySelector('.winner')
   const winCloseButton = document.querySelector('.close-button-win') 
+  const minesAllow = document.querySelector('.mines-allowed')
+  const error = document.querySelector('.error')
 
   function showWinnerBox(){
     winnerBox.classList.add('show')
@@ -121,7 +121,7 @@ function init() {
       difficulty.custom.width = parseInt(customWidth.value)
       difficulty.custom.height = parseInt(customHeight.value)
       difficulty.custom.mines = parseInt(customMines.value)
-      if (difficulty.custom.width > 6 && difficulty.custom.height > 3 && difficulty.custom.mines > 0 && difficulty.custom.mines < ((difficulty.custom.width - 1) * (difficulty.custom.height - 1))){
+      if (difficulty.custom.width > 6 && difficulty.custom.width <= 30 && difficulty.custom.height > 3 && difficulty.custom.height <= 24 && difficulty.custom.mines > 0 && difficulty.custom.mines < ((difficulty.custom.width - 1) * (difficulty.custom.height - 1))){
         difficultyOfGame(e)
         closeForm()
       }  
