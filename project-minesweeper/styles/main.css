@@ -14,23 +14,48 @@ body{
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   margin: auto;
+  /* min-width */
+}
+
+.clickable{
+  min-width: 268.19px;
+  border-left: 4.5px solid rgba(7,55,205,255);
+  border-bottom: 4.5px solid rgba(7,55,205,255);
+  border-right: 4.5px solid rgba(7,55,205,255);
+  background-color: rgba(235,233,218,255)
 }
 
 /* Game and help dropdown */
 
-.game, .help{
-  cursor: default;
+/* blue border hex #0737cd rgba rgba(7,55,205,255)
+
+
+cream back hex #1b42ae rgba rgba(235,233,218,255) */
+
+.menu-bar{
+  display: flex;
+  height: 28px;
+  background-color: rgba(235,233,218,255);
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
+
 .drop{
-  background-color: grey;
+  display: flex;
+  align-items: center;
+  cursor: default;
+  height: 28px;
   color: black;
-  padding: 10px;
-  font-size: 10px;
+  padding-left: 8px;
+  padding-right : 8px;
+  font-size: 15px;
   border: none;
-  position: relative;
-  display: inline-block;
+  /* position: relative; */
+  /* display: inline-block; */
 }
 
 .drop:hover {
@@ -39,15 +64,29 @@ body{
 }
 
 .game-content, .help-content{
-  cursor: auto;
+  padding: 8px;
+  font-size: 15px;
+  cursor: default;
   display: none;
   position: absolute;
   background-color: #f1f1f1;
-  min-width: 160px;
+  width: 105px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
 }
 
+.game1{
+  padding: 10px auto;
+}
+.game1.reset{
+  margin-bottom: 7px;
+}
+.line{
+  border-bottom: 1px solid black;
+}
+#beginner{
+  margin-top: 7px;
+}
 .help-content{
   position: absolute;
 }
@@ -70,22 +109,65 @@ body{
   display: flex;
 }
 
-.menu-bar{
-  display: flex;
+.instruct-window{
+  display: ;
 }
-
 
 .instructions{
   display: none;
-  width: 500px;
-  height: 300px;
-  border: 1px solid black;
-  background-color: white;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.custom-form{
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.winner{
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.instructions-main{
+  background-color: rgba(235,233,218,255);
+  border-left: 4.5px solid rgba(7,55,205,255);
+  border-bottom: 4.5px solid rgba(7,55,205,255);
+  border-right: 4.5px solid rgba(7,55,205,255);
+  background-color: rgba(235,233,218,255);
+  width: 500px;
+  height: 300px;
+}
+
+.winner-main{
+  background-color: rgba(235,233,218,255);
+  border-left: 4.5px solid rgba(7,55,205,255);
+  border-bottom: 4.5px solid rgba(7,55,205,255);
+  border-right: 4.5px solid rgba(7,55,205,255);
+  background-color: rgba(235,233,218,255);
+  width: 500px;
+  height: 300px;
+}
+
+.form-main{
+  background-color: rgba(235,233,218,255);
+  border-left: 4.5px solid rgba(7,55,205,255);
+  border-bottom: 4.5px solid rgba(7,55,205,255);
+  border-right: 4.5px solid rgba(7,55,205,255);
+  background-color: rgba(235,233,218,255);
+  width: 500px;
+  height: 300px;
+}
+
+
 
 .instruct-wrap{
   display: flex;
@@ -94,17 +176,125 @@ body{
   padding: 20px;
 }  
 
-.close-button{
-  width: 50px;
-  height: 20px;
-  border: 1px solid black;
-  text-align: center;
+.form-wrap{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
 }
 
+.winner-wrap{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+}
 
-/***  border styling ***/
+.form-field{
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 20px;
+}
+
+input{
+  width: 60px;
+  margin-top: 5px;
+}
+
+.button-wrap{
+  display: flex;
+  justify-content: center;
+}
+
+.close-button{
+  background-color: rgba(235,233,218,255);
+  width: 70px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  box-shadow: 2.5px 2.5px rgba(179,176,161,255);
+  border-top: 2.5px solid rgba(244,243,231,255);
+  border-left: 2.5px solid rgba(244,243,231,255);
+}
+
+.close-button-win{
+  background-color: rgba(235,233,218,255);
+  width: 70px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 60px;
+  box-shadow: 2.5px 2.5px rgba(179,176,161,255);
+  border-top: 2.5px solid rgba(244,243,231,255);
+  border-left: 2.5px solid rgba(244,243,231,255);
+}
+
+.close-button-win:active{
+  box-shadow: -2px -2px rgba(179,176,161,255)
+}
+
+.apply{
+  background-color: rgba(235,233,218,255);
+  width: 70px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  /* box-shadow: 2.5px 2.5px rgba(179,176,161,255); */
+  border-top: 2.5px solid rgba(244,243,231,255);
+  border-left: 2.5px solid rgba(244,243,231,255);
+}
+
+.close-button:active{
+  box-shadow: -2px -2px rgba(179,176,161,255)
+}
+
+.apply:active{
+  box-shadow: -2px -2px rgba(179,176,161,255)
+}
+
+.close-button, .cancel, .apply, .close-button-win{
+  cursor: default;
+}
+
+/*** window styling ***/
+
+ .window{
+  display: flex;
+  height: 42px;
+  width: 100%;
+ }
+ .win-left{
+  height: 42px;
+  width: 153.5px;
+  background-image: url("../assets/window_left.png");
+  background-size: 100% 100%;
+ }
+ .win-middle{
+  height: 42px;
+  width: calc(100% - 259.2px);
+  background-image: url("../assets/window_centre.png");
+  background-size: 100% 100%;
+ }
+ .win-right{
+  height: 42px;
+  width: 105.7px;
+  background-image: url("../assets/window_icons.png");
+  background-size: 100% 100%;
+ }
+
+
+/*** end window styling ***/
+
+/***  game border styling ***/
 
 .layer-one{
+  display: flex;
+  justify-content: center;
   height: 16.5px;
   width: 100%;
   display: flex;
@@ -130,6 +320,7 @@ body{
 
 .layer-two{
   display: flex;
+  justify-content: center;
   width: 100%;
 }
 
@@ -142,6 +333,7 @@ body{
 
 .layer-three{
   display: flex;
+  justify-content: center;
   width: 100%;
   height: 16.5px;
 }
@@ -164,6 +356,7 @@ body{
 
 .layer-four{
   display: flex;
+  justify-content: center;
   width: 100%;
   height: 100%;
 }
@@ -177,6 +370,7 @@ body{
 
 .layer-five{
   display: flex;
+  justify-content: center;
   width: 100%;
   height: 16.5px;
 }

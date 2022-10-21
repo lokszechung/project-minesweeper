@@ -5,6 +5,11 @@ function init() {
   // ** Elements **
   // TODO parent to appendChild to 
   const gridContainer = document.querySelector('.grid-container')
+  const gameContainer = document.querySelector('.game-container')
+  let cell
+  let cells = []
+  let minesPlaced = 0
+  let minePlacement = []
   const layerFour = document.querySelector('.layer-four')
   const display = document.querySelector('.score-container')
   const centralBorder = document.querySelectorAll('.central-border')
@@ -24,23 +29,53 @@ function init() {
   const howToPlayButton = document.querySelector('.how-to-play')
   const instructions = document.querySelector('.instructions')
   const closeButton = document.querySelector('.close-button')
+  const customForm = document.querySelector('.custom-form')
+  const customButton  = document.querySelector('.custom-button')
+  const cancelButton = document.querySelector('.cancel')
+  const timeWon = document.querySelector('.time')
+  const diffChoice = document.querySelector('.diff-choice')
+  const winnerBox = document.querySelector('.winner')
+  const winCloseButton = document.querySelector('.close-button-win') 
 
   function gameDropdown(){
     gameContent.classList.toggle('show')
+    // gameContainer.style.pointerEvents = 'none'
   }
 
   gameButton.addEventListener('click', gameDropdown)
 
   function helpDropdown(){
     helpContent.classList.toggle('show')
+    // gameContainer.style.pointerEvents = 'none'
   }
   helpButton.addEventListener('click', helpDropdown)
 
   function instruct(){
     instructions.style.display = 'block'
-    console.log('how to clicked')
+    // gameContainer.style.pointerEvents = 'none'
   }
   howToPlayButton.addEventListener('click', instruct)
+
+  function chooseCustom(){
+    customForm.style.display = 'block'
+    // gameContainer.style.pointerEvents = 'none'
+  }
+  customButton.addEventListener('click', chooseCustom)
+
+  function showWinnerBox(){
+    winnerBox.style.display = 'block'
+    // gameContainer.style.pointerEvents = 'none'
+  }
+
+  // function preventAccident(){
+  //   console.log(gameContainer)
+  //   console.log(gameContent.classList.contains('show'))
+  //   if (gameContent.classList.contains('show')){
+  //     gameContainer.style.pointerEvents = 'none'
+  //     console.log('cells should not click')
+  //   }  
+  // }
+  // preventAccident()
 
   // ! below will close dropdown when only outside window is clicked
   // function clickOut(e){
@@ -54,6 +89,7 @@ function init() {
   function clickOutGame(e){
     if (e.target !== gameButton){
       gameContent.classList.remove('show')
+      // gameContainer.style.pointerEvents = 'auto'
     }
   }
   window.addEventListener('click', clickOutGame)
@@ -61,14 +97,30 @@ function init() {
   function clickOutHelp(e){
     if (e.target !== helpButton){
       helpContent.classList.remove('show')
+      // setTimeout(() => {
+      //   gameContainer.style.pointerEvents = 'auto'
+      // }, 1000)
     }
   }
   window.addEventListener('click', clickOutHelp)
 
   function closeInstruct(){
     instructions.style.display = 'none'
+    // gameContainer.style.pointerEvents = 'auto'
   }
   closeButton.addEventListener('click', closeInstruct)
+
+  function closeForm(){
+    customForm.style.display = 'none'
+    // gameContainer.style.pointerEvents = 'auto'
+  }
+  // cancelButton.addEventListener('click', closeForm)
+
+  function winClose(){
+    winnerBox.style.display = 'none'
+    // gameContainer.style.pointerEvents = 'auto'
+  }
+  winCloseButton.addEventListener('click', winClose)
   
   // TODO Custom difficulty form
 
@@ -82,7 +134,7 @@ function init() {
     beginner: { 
       width: 8,
       height: 8,
-      mines: 10, 
+      mines: 6, 
     },
     intermediate: {
       width: 16,
@@ -105,30 +157,17 @@ function init() {
       e.preventDefault() 
       console.log(customWidth.value)
       console.log(difficulty)
-      difficulty.custom.width = customWidth.value
-      difficulty.custom.height = customHeight.value
-      difficulty.custom.mines = customMines.value
-      difficultyOfGame(e)
+      difficulty.custom.width = parseInt(customWidth.value)
+      difficulty.custom.height = parseInt(customHeight.value)
+      difficulty.custom.mines = parseInt(customMines.value)
+      if (difficulty.custom.width > 6 && difficulty.custom.height > 3 && difficulty.custom.mines > 0 && difficulty.custom.mines < ((difficulty.custom.width - 1) * (difficulty.custom.height - 1))){
+        difficultyOfGame(e)
+        closeForm()
+      }  
     },
-
-  }
-  applyCustom.addEventListener('click', difficulty.addCustom)
-  console.log(difficulty)
-  console.log(difficulty.intermediate.width)
-
-
-
-  // const customForm = document.forms.custom
-  // const formData = new FormData(customForm)
-  // const widthw = formData.get('width')
-  // console.log(widthw)
-
+  }  
   
-
-  let cell
-  let cells = []
-  let minesPlaced = 0
-  let minePlacement = []
+  applyCustom.addEventListener('click', difficulty.addCustom)
 
 
   let flags 
@@ -236,8 +275,9 @@ function init() {
   function reveal(e){
 
     difficultySetting = difficulty[choice]
+    console.log('setting ---> ' + difficulty[choice])
     const cellCount = difficulty[choice].width * difficulty[choice].height
-
+    console.log('cellCount ---> ' + cellCount)
     const target = e.target || e 
     const { dataset, classList } = target
     const currentCell = dataset.index   
@@ -245,6 +285,9 @@ function init() {
     let minesAdjacent = []
 
     // TODO Numbered cell 
+    if (gameContent.style.display === 'block' || helpContent.style.display === 'block' || instructions.style.display === 'block' || customForm.style.display === 'block'){
+      return
+    } 
 
     if (classList.contains('flag')){
       return
@@ -252,12 +295,12 @@ function init() {
 
     // function nextToMine(){
     if (!classList.contains('mine')){
-      console.log('before---> ' + executed)
       timingScore()
       executed = true
-      console.log('after---> ' + executed)
       target.id = 'opened'
       // check right
+      console.log(currentCell)
+      console.log(difficulty[choice].width)
       if (currentCell % difficulty[choice].width !== difficulty[choice].width - 1){
         adjacent.push(cells[parseFloat(currentCell) + 1])
       }
@@ -289,8 +332,8 @@ function init() {
       if (currentCell < cellCount - difficulty[choice].width && currentCell % difficulty[choice].width !== difficulty[choice].width - 1){
         adjacent.push(cells[parseFloat(currentCell) + 1 + difficulty[choice].width])
       }
-      
       minesAdjacent = adjacent.filter(cell => cell.classList.contains('mine'))
+
     }  
     // }
     // nextToMine()  
@@ -346,13 +389,19 @@ function init() {
           clearInterval(secondsTen)
           clearInterval(secondsHundred)
         }, 1)
-        !count ? console.log('Winner, you took 0.1 seconds.') : console.log(`Winner, you took ${Math.round(count * 10) / 10} seconds.`)
+        // let winTime 
+        !count ? count = 0.1 : count = Math.round(count * 10) / 10
+        timeWon.innerHTML = count
+        diffChoice.innerHTML = choice
         emoji.id = 'win'
         const allMines = document.querySelectorAll('.mine')
         allMines.forEach(cell => cell.classList.add('flag'))
         cells.forEach(cell => {
           cell.style.pointerEvents = 'none'
         })
+        setTimeout(() => {
+          showWinnerBox()
+        }, 1000)
       }
     }  
   }
@@ -360,7 +409,9 @@ function init() {
   // TODO tight click toggle flag
   function rightClick(e){
     e.preventDefault()
-    e.target.classList.toggle('flag')
+    if (e.target.id !== 'opened' && !openArray.includes(e.target.id)){
+      e.target.classList.toggle('flag')
+    }  
     countFlags()
   }
 
@@ -369,6 +420,8 @@ function init() {
     flaggedCells = cells.filter(cell => cell.classList.contains('flag'))
     flags = difficulty[choice].mines - flaggedCells.length
     if (flags >= 0 && flags < 10){
+      flagHundred.removeAttribute('class')
+      flagHundred.classList.add('zeronum')
       flagTen.removeAttribute('class')
       flagTen.classList.add('zeronum')
       flagUnit.removeAttribute('class')
@@ -414,7 +467,7 @@ function init() {
     }
   }
 
-
+  // TODO mousedown animation
   function emojiMouseDown(e){
     if (emoji.id !== 'lose' && emoji.id !== 'win'){
       if (!e.target.id && !e.target.classList.contains('flag')){
@@ -446,7 +499,6 @@ function init() {
   const secUnit = document.querySelector('#sec-unit')
   const secTen = document.querySelector('#sec-ten')
   const secHundred = document.querySelector('#sec-hundred')
-  // const timeArray = [ 'zeronum', 'onenum', 'twonum', 'threenum', 'fournum', 'fivenum', 'sixnum', 'sevennum', 'eightnum', 'ninenum' ]
   
   // TODO timer and Score
   let executed = false
@@ -576,36 +628,10 @@ function win(){
 
 
 
-// function getKey(difficulty, value){
-//   return Object.keys(difficulty).find(key => difficulty[key] === value)
-// }
-// console.log(getKey(difficulty, difficulty[choice]))
-
-// resetButton.id = ''
-// resetButton.id = getKey(difficulty, difficulty[choice])
-
-
-// function clickGrid(){
-// sqaures are either blank, bombs or numbers
-// Left click: reveals empty squares up to and including squares touching bombs (recursion) - then disable those squares
-// number on squares touching bombs - add class for number
-// right click: flag - toggle flag class - cannot place more flags than there are bombs
-// game over if bomb square clicked
-// win if only bombs squares unclicked
-// }
-
-// function difficultyPicked(){
-// restarts the game after being picked
-// if statement to check difficulty
-// depending on difficulty, different board sizes and number of mines will be generated
-// Could have separate functions for easy, medium, hard board generation
-// ! Stretch: allow player to generate custom board size and mine count  
-// }
-
-
 
 
 //timer only logs counts if i am on the page, but clock continues
 //mine can be clicked on first go
-//custom levels
 //high scores
+//if a menu is opened up, click anywhere to close it, but the game will also trigger
+
