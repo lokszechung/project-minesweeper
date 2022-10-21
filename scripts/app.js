@@ -95,7 +95,7 @@ function init() {
     beginner: { 
       width: 8,
       height: 8,
-      mines: 20, 
+      mines: 10, 
     },
     intermediate: {
       width: 16,
@@ -374,9 +374,9 @@ function init() {
         cells.forEach(cell => {
           cell.style.pointerEvents = 'none'
         })
-        // setTimeout(() => {
-        //   showWinnerBox()
-        // }, 1000)
+        setTimeout(() => {
+          showWinnerBox()
+        }, 1000)
       }
     }  
   }
@@ -445,7 +445,7 @@ function init() {
   // TODO mousedown animation
   function emojiMouseDown(e){
     if (emoji.id !== 'lose' && emoji.id !== 'win'){
-      if (!e.target.id && !e.target.classList.contains('flag')){
+      if (!e.target.classList.contains('opened') && !e.target.classList.contains('flag')){
         emoji.id = 'shock'
       }  
     }  
@@ -576,8 +576,6 @@ window.addEventListener('DOMContentLoaded', init)
 
 // 999 seconds goes to 000
 //timer only logs counts if i am on the page, but clock continues
-//mine can be clicked on first go
 //high scores
 //on the custom diff, if press cancel, breaks the game
-//if a menu is opened up, click anywhere to close it, but the game will also trigger if a square is clicked, or reset if the reset button is clicked
 

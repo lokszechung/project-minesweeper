@@ -37,10 +37,6 @@ body{
 
 /* Game and help dropdown */
 
-/* blue border hex #0737cd rgba rgba(7,55,205,255)
-
-
-cream back hex #1b42ae rgba rgba(235,233,218,255) */
 
 .menu-bar{
   display: flex;
@@ -109,8 +105,9 @@ cream back hex #1b42ae rgba rgba(235,233,218,255) */
   color: white;
 }
 
-.instruct-window{
-  display: ;
+p{
+  margin: 7.5px auto 7.5px 0px;
+  font-size: 15px;
 }
 
 .instructions{
@@ -148,7 +145,7 @@ cream back hex #1b42ae rgba rgba(235,233,218,255) */
   border-right: 4.5px solid rgba(7,55,205,255);
   background-color: rgba(235,233,218,255);
   width: 500px;
-  height: 300px;
+  height: 350px;
 }
 
 .winner-main{
@@ -217,7 +214,7 @@ input{
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 10px;
+  margin: 25px auto;
   box-shadow: 2.5px 2.5px rgba(179,176,161,255);
   border-top: 2.5px solid rgba(244,243,231,255);
   border-left: 2.5px solid rgba(244,243,231,255);
@@ -635,6 +632,56 @@ input{
   background-position: center;
 }
 .eightopen{
+  background-image: url("../assets/o8.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.oneopen:active{
+  background-image: url("../assets/o1.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.twoopen:active{
+  background-image: url("../assets/o2.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.threeopen:active{
+  background-image: url("../assets/o3.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.fouropen:active{
+  background-image: url("../assets/o4.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.fiveopen:active{
+  background-image: url("../assets/o5.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.sixopen:active{
+  background-image: url("../assets/o6.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.sevenopen:active{
+  background-image: url("../assets/o7.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.eightopen:active{
   background-image: url("../assets/o8.png");
   background-size: cover;
   background-repeat: no-repeat;
