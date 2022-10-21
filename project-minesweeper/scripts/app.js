@@ -33,45 +33,17 @@ function init() {
   const winnerBox = document.querySelector('.winner')
   const winCloseButton = document.querySelector('.close-button-win') 
 
-  function gameDropdown(){
-    gameContent.classList.toggle('show')
-    // gameContainer.style.pointerEvents = 'none'
-  }
-
-  gameButton.addEventListener('click', gameDropdown)
-
-  function helpDropdown(){
-    helpContent.classList.toggle('show')
-    // gameContainer.style.pointerEvents = 'none'
-  }
-  helpButton.addEventListener('click', helpDropdown)
-
-  function instruct(){
-    instructions.style.display = 'block'
-    // gameContainer.style.pointerEvents = 'none'
-  }
-  howToPlayButton.addEventListener('click', instruct)
-
-  function chooseCustom(){
-    customForm.style.display = 'block'
-    // gameContainer.style.pointerEvents = 'none'
-  }
-  customButton.addEventListener('click', chooseCustom)
-
   function showWinnerBox(){
-    winnerBox.style.display = 'block'
-    // gameContainer.style.pointerEvents = 'none'
+    winnerBox.classList.add('show')
   }
 
-  // function preventAccident(){
-  //   console.log(gameContainer)
-  //   console.log(gameContent.classList.contains('show'))
-  //   if (gameContent.classList.contains('show')){
-  //     gameContainer.style.pointerEvents = 'none'
-  //     console.log('cells should not click')
-  //   }  
-  // }
-  // preventAccident()
+  function popup(element){
+    element.classList.toggle('show')
+  }
+  gameButton.addEventListener('click', () => popup(gameContent))
+  helpButton.addEventListener('click', () => popup(helpContent))
+  howToPlayButton.addEventListener('click', () => popup(instructions))
+  customButton.addEventListener('click', () => popup(customForm))
 
   // ! below will close dropdown when only outside window is clicked
   // function clickOut(e){
@@ -85,7 +57,6 @@ function init() {
   function clickOutGame(e){
     if (e.target !== gameButton){
       gameContent.classList.remove('show')
-      // gameContainer.style.pointerEvents = 'auto'
     }
   }
   window.addEventListener('click', clickOutGame)
@@ -93,28 +64,22 @@ function init() {
   function clickOutHelp(e){
     if (e.target !== helpButton){
       helpContent.classList.remove('show')
-      // setTimeout(() => {
-      //   gameContainer.style.pointerEvents = 'auto'
-      // }, 1000)
     }
   }
   window.addEventListener('click', clickOutHelp)
 
   function closeInstruct(){
-    instructions.style.display = 'none'
-    // gameContainer.style.pointerEvents = 'auto'
+    instructions.classList.remove('show')
   }
   closeButton.addEventListener('click', closeInstruct)
 
   function closeForm(){
-    customForm.style.display = 'none'
-    // gameContainer.style.pointerEvents = 'auto'
+    customForm.classList.remove('show')
   }
   // cancelButton.addEventListener('click', closeForm)
 
   function winClose(){
-    winnerBox.style.display = 'none'
-    // gameContainer.style.pointerEvents = 'auto'
+    winnerBox.classList.remove('show')
   }
   winCloseButton.addEventListener('click', winClose)
   
@@ -130,7 +95,7 @@ function init() {
     beginner: { 
       width: 8,
       height: 8,
-      mines: 10, 
+      mines: 20, 
     },
     intermediate: {
       width: 16,
@@ -167,8 +132,8 @@ function init() {
 
   let cell
   let cells = []
-  let minesPlaced = 0
-  let minePlacement = []
+  let minesPlaced 
+  let minePlacement 
 
   let flags 
   let flaggedCells = []
@@ -176,7 +141,7 @@ function init() {
   const flagTen = document.querySelector('#flag-ten')
   const flagHundred = document.querySelector('#flag-hundred')
   const timeArray = [ 'zeronum', 'onenum', 'twonum', 'threenum', 'fournum', 'fivenum', 'sixnum', 'sevennum', 'eightnum', 'ninenum' ]
-  const openArray = [ 'oneopen', 'twoopen', 'threeopen', 'fouropen', 'fiveopen', 'sixopen', 'sevenopen', 'eightopens' ]
+  const openArray = [ 'oneopen', 'twoopen', 'threeopen', 'fouropen', 'fiveopen', 'sixopen', 'sevenopen', 'eightopen' ]
 
   // TODO difficulty
 
@@ -237,7 +202,7 @@ function init() {
     countFlags()
 
   }
-// before
+
   // TODO pick difficulty
   function difficultyOfGame(e){
     const target = e.target || e
@@ -272,25 +237,44 @@ function init() {
   function reveal(e){
 
     difficultySetting = difficulty[choice]
-    console.log('setting ---> ' + difficulty[choice])
     const cellCount = difficulty[choice].width * difficulty[choice].height
-    console.log('cellCount ---> ' + cellCount)
     const target = e.target || e 
     const { dataset, classList } = target
     const currentCell = dataset.index   
     const adjacent = []
     let minesAdjacent = []
+    const howManyOpened = cells.filter(cell => cell.classList.contains('opened'))
+
+    // TODO cannot hit a mine on first go
+    if (howManyOpened.length === 0 && classList.contains('mine')){
+      minePlacement = minePlacement.filter(cell => { 
+        console.log(cell.dataset.index, currentCell) 
+        return cell.dataset.index !== currentCell
+      })
+      classList.remove('mine')
+      minesPlaced--    
+      while (minesPlaced < difficulty[choice].mines){
+        const random = Math.floor(Math.random() * cells.length)
+        const randomIndex = cells[random]
+        if (!minePlacement.some(pos => pos === randomIndex)){
+          randomIndex.classList.add('mine')
+          minePlacement.push(randomIndex)
+          minesPlaced++
+        }    
+      }
+    }
+
+    
 
     // TODO Numbered cell 
-    // if (gameContent.style.display === 'block' || helpContent.style.display === 'block' || instructions.style.display === 'block' || customForm.style.display === 'block'){
-    //   return
-    // } 
+    if (gameContent.classList.contains('show') || helpContent.classList.contains('show') || instructions.classList.contains('show') || customForm.classList.contains('show')){
+      return
+    } 
 
     if (classList.contains('flag')){
       return
     }  
 
-    // function nextToMine(){
     if (!classList.contains('mine')){
       timingScore()
       executed = true
@@ -340,7 +324,6 @@ function init() {
         }
       }) 
     } else {
-      // target.removeAttribute('value')
       target.classList.add(openArray[minesAdjacent.length - 1])
     }
 
@@ -391,9 +374,9 @@ function init() {
         cells.forEach(cell => {
           cell.style.pointerEvents = 'none'
         })
-        setTimeout(() => {
-          showWinnerBox()
-        }, 1000)
+        // setTimeout(() => {
+        //   showWinnerBox()
+        // }, 1000)
       }
     }  
   }
