@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+<head>
+  <title>Minesweeper</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <script src="scripts/app.js"></script>
+</head>
+<body>
+  <div class="full-container">
+    <div class="window bar">
+      <div class="win-left"></div>
+      <div class="win-middle"></div>
+      <div class="win-right"></div>
+    </div>
+    <div class="clickable">
+      <div class="menu-bar">
+        <div class="game-wrap">
+          <div class="game drop">Game</div>
+          <div class="game-content popup">
+            <div class="game1 reset">Reset</div>
+            <div class="line"></div>
+            <div class="game1 difficulty" id="beginner">Beginner</div>
+            <div class="game1 difficulty" id="intermediate">Intermediate</div>
+            <div class="game1 difficulty" id="expert">Expert</div>
+            <div class="game1 difficulty custom-button" >Custom</div>
+          </div>
+        </div>
+        <div class="help-wrap">
+          <div class="help drop">Help</div>
+          <div class="help-content popup">
+            <div class="help1 how-to-play">How to Play</div>
+          </div>
+        </div>  
+        <div class="instructions pop">
+          <div class="instruct window">
+            <div class="win-left"></div>
+            <div class="win-middle"></div>
+            <div class="win-right"></div>
+          </div>  
+          <div class="instructions-main">
+            <div class="instruct-wrap">
+              <p>Mines are hidden in the grid of squares! Click any square to start.</p>
+              <p>Safe squares have numbers telling you how many mines touch the square. If you click on a mine you lose the game!</p>
+              <p>Right click to flag a square without opening it. The counter shows the number of mines without flags, and a clock shows your time in seconds.</p>
+              <p>To reset the game, click on the emoji. To choose difficulty, go to Game on the menu bar.</p>
+              <p>The game ends when all safe squares have been opened. </p> 
+              <div class="close-button">Close</div>
+            </div>  
+          </div>
+        </div>
+        <div class="winner pop">
+          <div class="win window">
+            <div class="win-left"></div>
+            <div class="win-middle"></div>
+            <div class="win-right"></div>
+          </div>  
+          <div class="winner-main">
+            <div class="winner-wrap">
+              <p>WINNER!</p>
+              <p>You took <span class="time"></span> seconds to complete <span class="diff-choice"></span> difficulty.</p>
+              <div class="close-button-win">Close</div>
+            </div>  
+          </div>
+        </div>
+        <div class="custom-form pop">
+          <div class="instruct window">
+            <div class="win-left"></div>
+            <div class="win-middle"></div>
+            <div class="win-right"></div>
+          </div>  
+          <div class="form-main">
+            <div class="form-wrap">
+              <form action="" method="post" id="customDiff">
+                <div class="form-field">
+                  <label for="width">Width (must be between 7 and 30)</label>
+                  <input type="number" name="width" class="custom-width" min="7" max="30" placeholder="7-30" required>
+                </div>
+                <div class="form-field">
+                  <label for="height">Height (must be between 4 and 24)</label>
+                  <input type="number" name="height" class="custom-height" min="4" max="24" placeholder="4-24" required>
+                </div>
+                <div class="form-field">
+                  <label for="mines">Mines (must be between 1 and (width-1)*(height-1))</label>
+                  <!-- <div class="mine-choose"> -->
+                  <input type="number" name="mines" class="custom-mines" min="1" max="99" required>
+                    <!-- <p class="error">Too many mines, please choose less than <span class="mines-allowed"></span></p> -->
+                  <!-- </div> -->
+                </div>
+                <div class="button-wrap">
+                  <!-- <div class="cancel">Cancel</div> -->
+                  <button class="apply" id="custom">Apply</button>
+                </div>
+              </form>
+            </div>
+          </div>  
+        </div>  
+      </div>
+      <div class="game-container">
+        <div class="border-wrapper layer-one">
+          <div class="top-left"></div>
+          <div class="top-border central-border"></div>
+          <div class="top-right"></div>
+        </div>
+        <div class="layer-two">
+          <div class="second-layer-left"></div>
+          <div class="score-container">
+            <div class="flag-count">
+              <div id="flag-hundred" class="zeronum"></div>
+              <div class="gap"></div>
+              <div id="flag-ten" class="zeronum"></div>
+              <div class="gap"></div>
+              <div id="flag-unit" class="zeronum"></div>
+            </div>
+            <div class="emoji" id="smiley"></div>
+            <div class="time-score">
+              <div id="sec-hundred" class="zeronum"></div>
+              <div class="gap"></div>
+              <div id="sec-ten" class="zeronum"></div>
+              <div class="gap"></div>
+              <div id="sec-unit" class="zeronum"></div>
+            </div>
+          </div>
+          <div class="second-layer-right"></div> 
+        </div>  
+        <div class="layer-three">
+          <div class="middle-left"></div>
+          <div class="middle-border central-border"></div>
+          <div class="middle-right"></div>
+        </div>
+        <div class="layer-four">
+          <div class="fourth-layer-left"></div>
+          <div class="grid-container"></div>
+          <div class="fourth-layer-right"></div>
+        </div>
+        <div class="layer-five">
+          <div class="bottom-left"></div>
+          <div class="bottom-border central-border"></div>
+          <div class="bottom-right"></div>
+        </div>
+      </div>
+    </div>
+  </div>  
+</body>
+</html>
