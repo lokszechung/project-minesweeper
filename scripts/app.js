@@ -90,7 +90,7 @@ function init() {
   const customMines = document.querySelector('.custom-mines')
   const applyCustom = document.querySelector('.apply')
   
-  // TODO object for difficult
+  // TODO define object for difficult
   const difficulty = {
     beginner: { 
       width: 8,
@@ -107,7 +107,6 @@ function init() {
       height: 16,
       mines: 99,
     },
-
     custom: {
       width: 0,
       height: 0,
@@ -116,8 +115,6 @@ function init() {
     
     addCustom(e){
       e.preventDefault() 
-      console.log(customWidth.value)
-      console.log(difficulty)
       difficulty.custom.width = parseInt(customWidth.value)
       difficulty.custom.height = parseInt(customHeight.value)
       difficulty.custom.mines = parseInt(customMines.value)
@@ -227,7 +224,6 @@ function init() {
     executed = false
     cells.forEach(cell => cell.addEventListener('click', reveal))
     cells.forEach(cell => cell.addEventListener('contextmenu', rightClickFlag))
-    console.log(executed)
     resetTimer()
   }
 
@@ -248,7 +244,6 @@ function init() {
     // TODO cannot hit a mine on first go
     if (howManyOpened.length === 0 && classList.contains('mine')){
       minePlacement = minePlacement.filter(cell => { 
-        console.log(cell.dataset.index, currentCell) 
         return cell.dataset.index !== currentCell
       })
       classList.remove('mine')
@@ -264,8 +259,6 @@ function init() {
       }
     }
 
-    
-
     // TODO Numbered cell 
     if (gameContent.classList.contains('show') || helpContent.classList.contains('show') || instructions.classList.contains('show') || customForm.classList.contains('show')){
       return
@@ -280,8 +273,6 @@ function init() {
       executed = true
       classList.add('opened')
       // check right
-      console.log(currentCell)
-      console.log(difficulty[choice].width)
       if (currentCell % difficulty[choice].width !== difficulty[choice].width - 1){
         adjacent.push(cells[parseFloat(currentCell) + 1])
       }
@@ -315,7 +306,6 @@ function init() {
       }
       minesAdjacent = adjacent.filter(cell => cell.classList.contains('mine'))
     }  
-    console.log(cells)
 
     if (minesAdjacent.length === 0){
       adjacent.forEach(cell => {
@@ -331,7 +321,6 @@ function init() {
       const allMines = document.querySelectorAll('.mine')
       allMines.forEach(cell => cell.classList.add('mine-clicked'))
       classList.add('main-mine')
-      console.log('Game over')
       emoji.id = 'lose'
       cells.forEach(cell => {
         cell.style.pointerEvents = 'none'
@@ -488,7 +477,6 @@ function init() {
 
       timer = setInterval(() => {
         count += 0.1
-        // console.log(count)
         if (count > 999){
           clearInterval(secondsUnit)
           clearInterval(secondsTen)
@@ -537,12 +525,10 @@ function init() {
         }
       }, 100000)     
     }   
-
   }  
 
   // TODO reset timer
   function resetTimer(){
-    console.log('timer reset')
     clearInterval(timer)
     clearInterval(secondsUnit)
     clearInterval(secondsTen)
