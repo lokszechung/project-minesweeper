@@ -4,7 +4,7 @@ Welcome to my first ever software development project!
 
 Minesweeper was completed on week 4 of General Assembly's Software Engineering bootcamp. I chose to build this Minesweeper game because it is a childhood favourite of mine, and I was intrigued by the challenge of coding the game’s logic.
 
-- **Project timeframe:** 1 week
+- **Project timeframe:** 7 days
 - **Team size:** Solo project
 
 [Have a go here!](https://lokszechung.github.io/project-minesweeper/)
@@ -47,7 +47,7 @@ The first step in the process was to generate the grid for minesweeper. The grid
 
 1. A ```difficulty``` object is defined, with each key being a difficulty level, which themselves are objects containing keys that define the width and height of the grid and the mines to be generated.
 
-```
+```js
 const difficulty = {
   beginner: { 
     width: 8,
@@ -72,13 +72,13 @@ const difficulty = {
 }  
 ```
 2. Variables needed to create the grid are globally defined, but these can also be reused later. The ```choice``` variable is set to beginner at the start, so that by default, the game is on beginner diffculty.
-```
+```js
 let cell
 let cells = []
 let minesPlaced 
 let minePlacement
 ```
-```
+```js
 let choice = 'beginner'
 let difficultySetting = difficulty[choice]
 let cellCount = difficulty[choice].width * difficulty[choice].height
@@ -86,7 +86,7 @@ let cellCount = difficulty[choice].width * difficulty[choice].height
 3. In the ```createGrid function```, I ensured that the ```gridContainer``` was empty, in case there were cells in there from previous games. The ```cells``` array is also emptied. Then I used a for loop to count each required cell, generate that number, and set the CSS for ```gridContainer``` height and width so that the generated cells would fit within the desired dimensions. Each cell is assigned a ```cell``` class a data-index value.
 
 4. The ```randomMines``` function randomly distributes mines across the grid. This was done by using a while loop to randomly select cells and checking if it exists in the ```minePlacement``` array. If not, then the cell is pushed into that array. This continues to loop until the amount of mines in the array equals the number of mines allocated in the object. Then for each cell in the array, a class of ```mine``` was assigned. 
-```
+```js
 function createGrid(){
   gridContainer.innerHTML = ''
   cells = []
@@ -121,7 +121,7 @@ function createGrid(){
 }
 ```
 5. The ```difficultyOfGame``` function takes the id of a difficulty selected and matches that to the corresponding difficulty in the object. The grid is then created accordingly. 
-```
+```js
 function difficultyOfGame(e){
   const target = e.target || e
   choice = target.id
@@ -136,7 +136,7 @@ function difficultyOfGame(e){
 The second step in the process was to create the reveal function, which contained the main logic of the game play. 
 
 1. When the player clicks on a cell, I first check to see whether it is a mine or if it is empty. If empty, it should display the number of mines adjacent to the cell. To achieve this, if the cell is not hiding a mine, then I check all 8 directions to see if a cell exists. If it exists, push that cell into the ```adjacent``` array. Then using the filter method, I filter through the adjacent array for any cell that includes a mine and I get the ```minesAdjacent``` array. The length of this array hence indicates the number of mines next to it. When each cell is checked, it is assigned a class of ```opened```.
-```
+```js
 if (!classList.contains('mine')){
   classList.add('opened')
   if (currentCell % difficulty[choice].width !== difficulty[choice].width - 1){
@@ -168,7 +168,7 @@ if (!classList.contains('mine')){
 ```
 2. The next part of this function is the recursive function. The ```reveal``` function is used when a cell is clicked and opened. If a cell opened has 0 mines adjacent to it, then the user knows they can safely open all 8 surrounding cells until they hit a numbered cell, which indicates the number of mines it is adjacent to. To eliminate the user having to open each cell manually when it has 0 mines nearby, I had to write a function that automatically opened these surrounding cells until a numbered cell is hit. If the minesAdjacent array is empty, then using the forEach method, each cell is passed as the argument back into the ```reveal``` function. Otherwise, it's given a classlist from an array called ```openArray```, according to the length of the minesAdjacent array. Here I also defined what happens when a mine cell is clicked on. I give each mine a ```mine-clicked``` class, change the emoji to the ```dead``` emoji and ```clearInterval``` for the timer. I also set CSS ```pointerEvents``` to none to avoid the player clicking cells after the loss. 
 
-```
+```js
 function reveal(e){
 
   difficultySetting = difficulty[choice]
@@ -219,7 +219,7 @@ function reveal(e){
 }
 ```
 3. In order that the player cannot lose on the first go, the function includes a check that ensures that if a cell with a ‘mine’ class is picked but no cells are opened yet, then the ```mine``` class is removed and reassigned to another cell that does not already have a mine.
-```
+```js
 const howManyOpened = cells.filter(cell => cell.classList.contains('opened'))
 
 if (howManyOpened.length === 0 && classList.contains('mine')){
@@ -246,7 +246,7 @@ Having completed the main game logic, I now needed the win (and lose) condition.
 
 1. The lose condition was simple, if a cell was clicked on and it contained a class of ```mine```, then the player loses. 
 2. For the win condition,  I first defined a ```notMines``` variable. This variable is assigned the value of the total cell count minus the total mines on the grid. Then another variable called ```openedCells``` was defined, which is an array produced from filtering through the full array of cells for cells with the ```opened``` class. If ```notMines``` and ```openedCells``` length are the same, that means all cells but those with mines are opened, and therefore the player wins. Change the emoji to the win emoji, ```clearInterval``` for the timer (but delay it ever so slightly with ```setTimeout```, otherwise if the player wins instantaneously and the timer continues to run). I also ran the ```showWinnerBox``` function after a short while to display the time taken. 
-```
+```js
 function winCondition(){
   if (cellCount !== difficulty[choice].mines){ 
     let notMines 
@@ -282,7 +282,7 @@ Now that I had a functional game, I spent a couple of days working on the featur
 **Flagging a Cell**
 
 I added an event listener for the right click mouse event to flag a cell. The ```preventDefault``` method ensures the context menu does not appear. Then a check to ensure the cell is not already opened and does not have a number, then toggle a class of flag. 
-```
+```js
 function rightClickFlag(e){
   e.preventDefault()
   if (e.target.id !== 'opened' && !openArray.includes(e.target.id)){
@@ -296,7 +296,7 @@ cells.forEach(cell => cell.addEventListener('contextmenu', rightClickFlag))
 **Flag Counter**
 
 At the start of the game the left hand counter indicates the number of mines in the grid. As the player flags cells, this number will be minus for each cell flagged. Since I used images to display each number, I created a timeArray containing strings that corresponded to classes which on CSS changed the image accordingly. The number of flags counter number is turned into a string value, then split, to create an array of which the items are each individual character of the number. Then according to each number, assign that div the corresponding class according to the position in the array. 
-```
+```js
 function countFlags(){
   flaggedCells = cells.filter(cell => cell.classList.contains('flag'))
   flags = difficulty[choice].mines - flaggedCells.length
@@ -352,7 +352,7 @@ function countFlags(){
 **Timer**
 
 The timer on the top right is also used for scoring. The timer uses individual images on the top right, so they would have to change every 1 second, 10 seconds and 100 seconds. A similar technique was used here to the flag counter, where an array for classes was defined. Then a ```setInterval``` to change the numbers each second etc. An invisible timer would also run, counting every 0.1 second. Once the clock reaches 999, it should ```clearInterval``` to avoid the clock returning to 000. A variable of execution was also declared, to ensure that the clock only activates if ```executed === false```. This is to ensure that when the clock is initiated when the first cell is clicked, it will not start another timer when another cell is clicked, until the timer is reset.
-```
+```js
 let timer
 let secondsUnit
 let secondsTen
@@ -365,7 +365,7 @@ const secUnit = document.querySelector('#sec-unit')
 const secTen = document.querySelector('#sec-ten')
 const secHundred = document.querySelector('#sec-hundred')
 ```
-```
+```js
 let executed = false
 
 function timingScore(){
